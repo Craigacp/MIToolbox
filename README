@@ -1,0 +1,32 @@
+This is the MIToolbox v1.02 for C/C++ and MATLAB/OCTAVE
+
+It provides a series of functions for working with information theory and 
+Renyi's extension to information theory. It also contains some variable 
+manipulation functions to preprocess discrete/categorical variables to generate
+information theoretic values from the variables. 
+
+These functions are targeted for use with feature selection algorithms rather 
+than communication channels and so expect all the data to be available before 
+execution and sample their own probability distributions from the data.
+
+Functions contained:
+ - Entropy
+ - Conditional Entropy
+ - Mutual Information
+ - Conditional Mutual Information
+ - generating a joint variable
+ - generating a probability distribution from a discrete random variable
+ - Renyi's Entropy
+ - Renyi's Mutual Information
+
+To compile the library for use in MATLAB/OCTAVE, execute CompileScript.m
+from within MATLAB, or run 'make matlab' from a linux terminal.
+
+The C source files are licensed under the LGPL v3. The MATLAB wrappers and 
+demonstration feature selection algorithms are provided as is with no warranty 
+as examples of how to use the library in MATLAB.
+
+Update History
+07/07/2010 - v1.0 - Initial Release
+02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug where the last feature would not be selected first if it had the highest MI
+15/10/2010 - v1.02 - Fixed bug where MIToolbox would cause a segmentation fault if a x by 0 empty matrix was passed in. Now prints an error message and returns gracefully
