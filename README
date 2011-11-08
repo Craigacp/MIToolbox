@@ -65,7 +65,7 @@ demonstration feature selection algorithms are provided as is with no warranty
 as examples of how to use the library in MATLAB.
 
 Update History
-08/11/2011 - v1.03 - Minor mods to accompany the JMLR publication.
+08/11/2011 - v1.03 - Minor documentation changes to accompany the JMLR publication.
 15/10/2010 - v1.02 - Fixed bug where MIToolbox would cause a segmentation fault if a x by 0 empty matrix was passed in. Now prints an error message and returns gracefully
 02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug where the last feature would not be selected first if it had the highest MI
 07/07/2010 - v1.00 - Initial Release
