@@ -1,15 +1,16 @@
-This is the MIToolbox v1.02 for C/C++ and MATLAB/OCTAVE
+MIToolbox v1.03 for C/C++ and MATLAB/OCTAVE
 
-It provides a series of functions for working with information theory and 
-Renyi's extension to information theory. It also contains some variable 
-manipulation functions to preprocess discrete/categorical variables to generate
-information theoretic values from the variables. 
+The MIToolbox contains a set of functions to calculate information theoretic
+quantities from data, such as the entropy and mutual information.  The toolbox
+contains implementations of the most popular Shannon entropies, and also the
+lesser known Renyi entropy.  The toolbox only supports discrete distributions,
+as opposed to continuous. All real-valued numbers will be processed by x = floor(x)
 
 These functions are targeted for use with feature selection algorithms rather 
 than communication channels and so expect all the data to be available before 
 execution and sample their own probability distributions from the data.
 
-Functions contained:
+Things you can do:
  - Entropy
  - Conditional Entropy
  - Mutual Information
@@ -19,14 +20,52 @@ Functions contained:
  - Renyi's Entropy
  - Renyi's Mutual Information
 
-To compile the library for use in MATLAB/OCTAVE, execute CompileScript.m
-from within MATLAB, or run 'make matlab' from a linux terminal.
+Note: all functions are calculated in log base 2, so return units of "bits".
+
+======
+
+Examples:
+
+>> y = [1 1 1 0 0]';
+>> x = [1 0 1 1 0]';
+
+>> mi(x,y)       %% mutual information I(X;Y)
+ans =
+    0.0200
+
+>> h(x)          %% entropy H(X)
+ans =
+    0.9710
+
+>> condh(x,y)    %% conditional entropy H(X|Y)
+ans =
+    0.9510
+
+>> h( [x,y] )    %% joint entropy H(X,Y)
+ans =
+    1.9219
+
+>> joint([x,y])  %% joint random variable XY
+ans =
+     1
+     2
+     1
+     3
+     4
+
+======
+
+To compile the library for use in MATLAB/OCTAVE, execute CompileMIToolbox.m
+from within MATLAB, or run 'make matlab' from a terminal.
+
+To compile the library for C/C++, run 'make' at a terminal.
 
 The C source files are licensed under the LGPL v3. The MATLAB wrappers and 
 demonstration feature selection algorithms are provided as is with no warranty 
 as examples of how to use the library in MATLAB.
 
 Update History
-07/07/2010 - v1.0 - Initial Release
-02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug where the last feature would not be selected first if it had the highest MI
+08/11/2011 - v1.03 - Minor mods to accompany the JMLR publication.
 15/10/2010 - v1.02 - Fixed bug where MIToolbox would cause a segmentation fault if a x by 0 empty matrix was passed in. Now prints an error message and returns gracefully
+02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug where the last feature would not be selected first if it had the highest MI
+07/07/2010 - v1.00 - Initial Release
