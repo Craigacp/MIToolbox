@@ -51,6 +51,26 @@ typedef struct pState
   int numStates;
 } ProbabilityState;
 
+typedef struct wjpState
+{
+  double *jointProbabilityVector;
+  double *jointWeightVector;
+  int numJointStates;
+  double *firstProbabilityVector;
+  double *firstWeightVector;
+  int numFirstStates;
+  double *secondProbabilityVector;
+  double *secondWeightVector;
+  int numSecondStates;
+} WeightedJointProbState;
+
+typedef struct wpState
+{
+  double *probabilityVector;
+  double *stateWeightVector;
+  int numStates;
+} WeightedProbState;
+
 /*******************************************************************************
 ** calculateJointProbability returns the joint probability vector of two vectors
 ** and the marginal probability vectors in a struct.
@@ -63,6 +83,13 @@ typedef struct pState
 JointProbabilityState calculateJointProbability(double *firstVector, double *secondVector, int vectorLength);
 
 /*******************************************************************************
+** calculateWeightedJointProbability returns the same joint state object
+** as calculateJointProbability, with additional weightVectors giving the 
+** weight assigned to each state.
+*******************************************************************************/
+WeightedJointProbState calculateWeightedJointProbability(double *firstVector, double *secondVector, double *exampleWeightVector, int vectorLength);
+
+/*******************************************************************************
 ** calculateProbability returns the probability vector from one vector.
 ** It is the base operation for all information theory calculations involving 
 ** one variable
@@ -71,6 +98,13 @@ JointProbabilityState calculateJointProbability(double *firstVector, double *sec
 ** will be a segmentation fault
 *******************************************************************************/
 ProbabilityState calculateProbability(double *dataVector, int vectorLength);
+
+/*******************************************************************************
+** calculateWeightedProbability returns the same state object
+** as calculateProbability, with an additional weightVector giving the 
+** weight assigned to each state.
+*******************************************************************************/
+WeightedProbState calculateWeightedProbability(double *dataVector, double *exampleWeightVector, int vectorLength);
 
 #ifdef __cplusplus
 }

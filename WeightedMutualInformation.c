@@ -1,16 +1,17 @@
 /*******************************************************************************
-** MutualInformation.c
+** WeightedMutualInformation.c
 ** Part of the mutual information toolbox
 **
 ** Contains functions to calculate the mutual information of 
 ** two variables X and Y, I(X;Y), to calculate the joint mutual information
 ** of two variables X & Z on the variable Y, I(XZ;Y), and the conditional
-** mutual information I(x;Y|Z)
+** mutual information I(X;Y|Z), while using a weight vector to modify the
+** calculation.
 ** 
 ** Author: Adam Pocock
-** Created 19/2/2010
+** Created: 20/06/2011
 **
-**  Copyright 2010 Adam Pocock, The University Of Manchester
+**  Copyright 2010/2011 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox.
@@ -33,15 +34,15 @@
 #include "MIToolbox.h"
 #include "ArrayOperations.h"
 #include "CalculateProbability.h"
-#include "Entropy.h"
-#include "MutualInformation.h"
+#include "WeightedEntropy.h"
+#include "WeightedMutualInformation.h"
 
-double calculateMutualInformation(double *dataVector, double *targetVector, int vectorLength)
+double calculateWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength)
 {
   double mutualInformation = 0.0;
   int firstIndex,secondIndex;
   int i;
-  JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
+  WeightedJointProbState state = calculateWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
     
   /*
   ** I(X;Y) = sum sum p(xy) * log (p(xy)/p(x)p(y))
@@ -56,11 +57,11 @@ double calculateMutualInformation(double *dataVector, double *targetVector, int 
       /*double division is probably more stable than multiplying two small numbers together
       ** mutualInformation += state.jointProbabilityVector[i] * log(state.jointProbabilityVector[i] / (state.firstProbabilityVector[firstIndex] * state.secondProbabilityVector[secondIndex]));
       */
-      mutualInformation += state.jointProbabilityVector[i] * log(state.jointProbabilityVector[i] / state.firstProbabilityVector[firstIndex] / state.secondProbabilityVector[secondIndex]);
+      mutualInformation += state.jointWeightVector[i] * state.jointProbabilityVector[i] * log(state.jointProbabilityVector[i] / state.firstProbabilityVector[firstIndex] / state.secondProbabilityVector[secondIndex]);
     }
   }
   
-  mutualInformation /= log(2.0);
+  mutualInformation /= log(LOG_BASE);
   
   FREE_FUNC(state.firstProbabilityVector);
   state.firstProbabilityVector = NULL;
@@ -70,9 +71,9 @@ double calculateMutualInformation(double *dataVector, double *targetVector, int 
   state.jointProbabilityVector = NULL;
   
   return mutualInformation;
-}/*calculateMutualInformation(double *,double *,int)*/
+}/*calculateWeightedMutualInformation(double *,double *,double *,int)*/
 
-double calculateConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength)
+double calculateWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength)
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
@@ -81,9 +82,9 @@ double calculateConditionalMutualInformation(double *dataVector, double *targetV
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   
   /* I(X;Y|Z) = H(X|Z) - H(X|YZ) */
-  /* double calculateConditionalEntropy(double *dataVector, double *conditionVector, int vectorLength); */
-  firstCondition = calculateConditionalEntropy(dataVector,conditionVector,vectorLength);
-  secondCondition = calculateConditionalEntropy(dataVector,mergedVector,vectorLength);
+  /* double calculateWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength); */
+  firstCondition = calculateWeightedConditionalEntropy(dataVector,conditionVector,weightVector,vectorLength);
+  secondCondition = calculateWeightedConditionalEntropy(dataVector,mergedVector,weightVector,vectorLength);
   
   mutualInformation = firstCondition - secondCondition;
   
@@ -91,5 +92,5 @@ double calculateConditionalMutualInformation(double *dataVector, double *targetV
   mergedVector = NULL;
   
   return mutualInformation;
-}/*calculateConditionalMutualInformation(double *,double *,double *,int)*/
+}/*calculateWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/
 

@@ -52,17 +52,23 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     printf("Incorrect number of output arguments\n");
   }//if not 1 output
   */
-  if (nrhs == 3)
+  switch (nrhs)
   {
-    /*printf("Must be H(X)\n");*/
-  }
-  else if (nrhs == 4)
-  {
-    /*printf("Must be H(XY), I(X;Y)\n");*/
-  }
-  else
-  {
-    printf("Incorrect number of arguments, format is RenyiMIToolbox(\"FLAG\",varargin)\n");
+    case 3:
+    {
+        /*printf("Must be H_\alpha(X)\n");*/
+        break;
+    }
+    case 4:
+    {
+        /*printf("Must be H_\alpha(XY), I_\alpha(X;Y)\n");*/
+        break;
+    }
+    default:
+    {
+        printf("Incorrect number of arguments, format is RenyiMIToolbox(\"FLAG\",varargin)\n");
+        break;
+    }
   }
   
   /* number to function map

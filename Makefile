@@ -24,10 +24,19 @@
 CXXFLAGS = -O3 -fPIC
 COMPILER = gcc
 objects = ArrayOperations.o CalculateProbability.o Entropy.o \
-          MutualInformation.o RenyiEntropy.o RenyiMutualInformation.o
+          MutualInformation.o RenyiEntropy.o RenyiMutualInformation.o \
+		  WeightedEntropy.o WeightedMutualInformation.o
           
 libMIToolbox.so : $(objects)
 	$(COMPILER) $(CXXFLAGS) -shared -o libMIToolbox.so $(objects)
+
+WeightedMutualInformation.o: WeightedMutualInformation.c MIToolbox.h ArrayOperations.h \
+ CalculateProbability.h WeightedEntropy.h
+	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c WeightedMutualInformation.c 
+ 
+WeightedEntropy.o: WeightedEntropy.c MIToolbox.h ArrayOperations.h \
+ CalculateProbability.h
+	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c WeightedEntropy.c
 
 RenyiMutualInformation.o: RenyiMutualInformation.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h RenyiEntropy.h
@@ -68,11 +77,13 @@ x64:
 matlab:
 	mex MIToolboxMex.c MutualInformation.c Entropy.c CalculateProbability.c ArrayOperations.c
 	mex RenyiMIToolboxMex.c RenyiMutualInformation.c RenyiEntropy.c CalculateProbability.c ArrayOperations.c
-  
+	mex WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbaility.c ArrayOperations.c
+
 .PHONY : matlab-debug
 matlab-debug:
 	mex -g MIToolboxMex.c MutualInformation.c Entropy.c CalculateProbability.c ArrayOperations.c
 	mex -g RenyiMIToolboxMex.c RenyiMutualInformation.c RenyiEntropy.c CalculateProbability.c ArrayOperations.c
+	mex -g WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbaility.c ArrayOperations.c
 
 .PHONY : intel
 intel:
@@ -80,5 +91,6 @@ intel:
 
 .PHONY : clean
 clean:
-	rm *.o libMIToolbox.so
+	rm *.o 
+	rm libMIToolbox.so
 

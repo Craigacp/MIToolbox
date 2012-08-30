@@ -1,16 +1,18 @@
-MIToolbox v1.03 for C/C++ and MATLAB/OCTAVE
+MIToolbox v2.0 for C/C++ and MATLAB/OCTAVE
 
 The MIToolbox contains a set of functions to calculate information theoretic
 quantities from data, such as the entropy and mutual information.  The toolbox
 contains implementations of the most popular Shannon entropies, and also the
-lesser known Renyi entropy.  The toolbox only supports discrete distributions,
-as opposed to continuous. All real-valued numbers will be processed by x = floor(x)
+lesser known Renyi entropy. The toolbox also provides implementations of 
+the weighted entropy and weighted mutual information from "Information Theory
+with Application", S. Guiasu (1977). The toolbox only supports discrete distributions,
+as opposed to continuous. All real-valued numbers will be processed by x = floor(x).
 
 These functions are targeted for use with feature selection algorithms rather 
 than communication channels and so expect all the data to be available before 
 execution and sample their own probability distributions from the data.
 
-Things you can do:
+Functions contained:
  - Entropy
  - Conditional Entropy
  - Mutual Information
@@ -19,6 +21,9 @@ Things you can do:
  - generating a probability distribution from a discrete random variable
  - Renyi's Entropy
  - Renyi's Mutual Information
+ - Weighted Entropy
+ - Weighted Mutual Information
+ - Weighted Conditional Mutual Information
 
 Note: all functions are calculated in log base 2, so return units of "bits".
 
@@ -58,14 +63,23 @@ ans =
 To compile the library for use in MATLAB/OCTAVE, execute CompileMIToolbox.m
 from within MATLAB, or run 'make matlab' from a terminal.
 
-To compile the library for C/C++, run 'make' at a terminal.
+To compile the library for use with C programs run 'make x86' for a 32-bit
+library, or 'make x64' for a 64-bit library. 
 
 The C source files are licensed under the LGPL v3. The MATLAB wrappers and 
 demonstration feature selection algorithms are provided as is with no warranty 
 as examples of how to use the library in MATLAB.
 
 Update History
+30/07/2011 - v2.00 - Added implementations of the weighted entropy and weighted
+                     mutual information. More cleanup of Mex entry point
+                     to further check the inputs.
 08/11/2011 - v1.03 - Minor documentation changes to accompany the JMLR publication.
-15/10/2010 - v1.02 - Fixed bug where MIToolbox would cause a segmentation fault if a x by 0 empty matrix was passed in. Now prints an error message and returns gracefully
-02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug where the last feature would not be selected first if it had the highest MI
-07/07/2010 - v1.00 - Initial Release
+15/10/2010 - v1.02 - Fixed bug where MIToolbox would cause a segmentation fault
+                     if a x by 0 empty matrix was passed in. Now prints an 
+                     error message and returns gracefully.
+02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug 
+                     where the last feature would not be selected first if it 
+                     had the highest MI.
+07/07/2010 - v1.00 - Initial Release.
+                    

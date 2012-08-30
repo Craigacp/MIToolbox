@@ -61,21 +61,28 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     printf("Incorrect number of output arguments\n");
   }//if not 1 output
   */
-  if (nrhs == 2)
+  switch (nrhs)
   {
-    /*printf("Must be H(X), calculateProbability(X), merge(X), normaliseArray(X)\n");*/
-  }
-  else if (nrhs == 3)
-  {
-    /*printf("Must be H(XY), H(X|Y), calculateJointProbability(XY), I(X;Y)\n");*/
-  }
-  else if (nrhs == 4)
-  {
-    /*printf("Must be I(X;Y|Z)\n");*/
-  }
-  else
-  {
-    printf("Incorrect number of arguments, format is MIToolbox(\"FLAG\",varargin)\n");
+    case 2:
+    {
+        /*printf("Must be H(X), calculateProbability(X), merge(X), normaliseArray(X)\n");*/
+        break;
+    }
+    case 3:
+    {
+        /*printf("Must be H(XY), H(X|Y), calculateJointProbability(XY), I(X;Y)\n");*/
+        break;
+    }
+    case 4:
+    {
+        /*printf("Must be I(X;Y|Z)\n");*/
+        break;
+    }
+    default:
+    {
+        printf("Incorrect number of arguments, format is MIToolbox(\"FLAG\",varargin)\n");
+        break;
+    }
   }
   
   /* number to function map

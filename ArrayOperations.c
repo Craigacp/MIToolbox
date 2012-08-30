@@ -116,8 +116,7 @@ int normaliseArray(double *inputVector, int *outputVector, int vectorLength)
       {
         minVal = currentValue;
       }
-      
-      if (currentValue > maxVal)
+      else if (currentValue > maxVal)
       {
         maxVal = currentValue;
       }
