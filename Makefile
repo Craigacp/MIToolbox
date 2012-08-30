@@ -77,13 +77,13 @@ x64:
 matlab:
 	mex MIToolboxMex.c MutualInformation.c Entropy.c CalculateProbability.c ArrayOperations.c
 	mex RenyiMIToolboxMex.c RenyiMutualInformation.c RenyiEntropy.c CalculateProbability.c ArrayOperations.c
-	mex WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbaility.c ArrayOperations.c
+	mex WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbability.c ArrayOperations.c
 
 .PHONY : matlab-debug
 matlab-debug:
 	mex -g MIToolboxMex.c MutualInformation.c Entropy.c CalculateProbability.c ArrayOperations.c
 	mex -g RenyiMIToolboxMex.c RenyiMutualInformation.c RenyiEntropy.c CalculateProbability.c ArrayOperations.c
-	mex -g WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbaility.c ArrayOperations.c
+	mex -g WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbability.c ArrayOperations.c
 
 .PHONY : intel
 intel:
