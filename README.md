@@ -1,6 +1,8 @@
-MIToolbox v2.0 for C/C++ and MATLAB/OCTAVE
+MIToolbox
+=========
+v2.1 for C/C++ and MATLAB/Octave
 
-The MIToolbox contains a set of functions to calculate information theoretic
+MIToolbox contains a set of functions to calculate information theoretic
 quantities from data, such as the entropy and mutual information.  The toolbox
 contains implementations of the most popular Shannon entropies, and also the
 lesser known Renyi entropy. The toolbox also provides implementations of 
@@ -71,6 +73,8 @@ demonstration feature selection algorithms are provided as is with no warranty
 as examples of how to use the library in MATLAB.
 
 Update History
+22/02/2014 - v2.1  - Fixed a couple of bugs related to memory handling.
+                     Added a make install for compatibility with PyFeast.
 30/07/2011 - v2.00 - Added implementations of the weighted entropy and weighted
                      mutual information. More cleanup of Mex entry point
                      to further check the inputs.
@@ -78,8 +82,7 @@ Update History
 15/10/2010 - v1.02 - Fixed bug where MIToolbox would cause a segmentation fault
                      if a x by 0 empty matrix was passed in. Now prints an 
                      error message and returns gracefully.
-02/09/2010 - v1.01 - Updated CMIM.m in demonstration_algorithms, due to a bug 
-                     where the last feature would not be selected first if it 
-                     had the highest MI.
+02/09/2010 - v1.01 - Fixed a bug in CMIM.m where the last feature would not be 
+                     selected first if it had the highest MI.
 07/07/2010 - v1.00 - Initial Release.
                     
