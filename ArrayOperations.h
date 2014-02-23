@@ -7,7 +7,7 @@
 ** 
 ** Author: Adam Pocock
 ** Created 17/2/2010
-** Updated - 22/02/2014 - Added checking on calloc.
+** Updated - 22/02/2014 - Added checking on calloc, and an increment array function.
 **
 **  Copyright 2010,2014 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
@@ -40,6 +40,11 @@ extern "C" {
 ** A version of calloc which checks to see if memory was allocated.
 *******************************************************************************/
 void* checkedCalloc(size_t vectorLength, size_t sizeOfType);
+
+/*******************************************************************************
+** Increments each value in a double array
+*******************************************************************************/
+void incrementVector(double* vector, int vectorLength);
 
 /*******************************************************************************
 ** Simple print functions for debugging

@@ -47,6 +47,14 @@ void* checkedCalloc(size_t vectorLength, size_t sizeOfType) {
     return allocated;
 }
 
+void incrementVector(double* vector, int vectorLength) {
+    int i = 0;
+    for (i = 0; i < vectorLength; i++)
+    {
+        vector[i]++; /*C indexes from 0 not 1*/
+    }/*for length of array */
+}/* incrementVector(double*,int) */
+
 void printDoubleVector(double *vector, int vectorLength)
 {
   int i;
