@@ -7,8 +7,9 @@
 ** 
 ** Author: Adam Pocock
 ** Created 17/2/2010
+** Updated - 22/02/2014 - Added checking on calloc.
 **
-**  Copyright 2010 Adam Pocock, The University Of Manchester
+**  Copyright 2010,2014 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox.
@@ -36,10 +37,14 @@ extern "C" {
 #endif 
 
 /*******************************************************************************
-** Simple print function for debugging
+** A version of calloc which checks to see if memory was allocated.
 *******************************************************************************/
-void printDoubleVector(double *vector, int vectorLength);
+void* checkedCalloc(size_t vectorLength, size_t sizeOfType);
 
+/*******************************************************************************
+** Simple print functions for debugging
+*******************************************************************************/
+void printDoubleVector(double *vector, int vectorlength);
 void printIntVector(int *vector, int vectorLength);
 
 /*******************************************************************************

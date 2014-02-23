@@ -1,5 +1,5 @@
 /*******************************************************************************
-** ArrayOperations.cpp
+** ArrayOperations.c
 ** Part of the mutual information toolbox
 **
 ** Contains functions to floor arrays, and to merge arrays into a joint
@@ -7,8 +7,9 @@
 ** 
 ** Author: Adam Pocock
 ** Created 17/2/2010
+** Updated - 22/02/2014 - Added checking on calloc.
 **
-**  Copyright 2010 Adam Pocock, The University Of Manchester
+**  Copyright 2010,2014 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox.
@@ -28,8 +29,23 @@
 **
 *******************************************************************************/
 
+#include <errno.h>
 #include "MIToolbox.h"
 #include "ArrayOperations.h"
+
+void* checkedCalloc(size_t vectorLength, size_t sizeOfType) {
+    void *allocated = CALLOC_FUNC(vectorLength, sizeOfType);
+    if(allocated == NULL) {
+#ifdef MEX_IMPLEMENTATION
+        /* This call returns control to Matlab, with the associated error message */
+        mexErrMsgTxt("Failed to allocate memory\n");
+#else
+        fprintf(stderr, "Error: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+#endif
+    }
+    return allocated;
+}
 
 void printDoubleVector(double *vector, int vectorLength)
 {
@@ -53,7 +69,7 @@ void printIntVector(int *vector, int vectorLength)
 int numberOfUniqueValues(double *featureVector, int vectorLength)
 {
   int uniqueValues = 0;
-  double *valuesArray = (double *) CALLOC_FUNC(vectorLength,sizeof(double));
+  double *valuesArray = (double *) checkedCalloc(vectorLength,sizeof(double));
   
   int found = 0;
   int j = 0;
@@ -152,8 +168,8 @@ int mergeArrays(double *firstVector, double *secondVector, double *outputVector,
   int stateCount;
   int curIndex;
   
-  firstNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
-  secondNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
 
   firstNumStates = normaliseArray(firstVector,firstNormalisedVector,vectorLength);
   secondNumStates = normaliseArray(secondVector,secondNormalisedVector,vectorLength);
@@ -162,7 +178,7 @@ int mergeArrays(double *firstVector, double *secondVector, double *outputVector,
   ** printVector(firstNormalisedVector,vectorLength);
   ** printVector(secondNormalisedVector,vectorLength);
   */
-  stateMap = (int *) CALLOC_FUNC(firstNumStates*secondNumStates,sizeof(int));
+  stateMap = (int *) checkedCalloc(firstNumStates*secondNumStates,sizeof(int));
   stateCount = 1;
   for (i = 0; i < vectorLength; i++)
   {
@@ -195,8 +211,8 @@ int mergeArraysArities(double *firstVector, int numFirstStates, double *secondVe
   int totalStates;
   int firstStateCheck, secondStateCheck;
   
-  firstNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
-  secondNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
 
   firstStateCheck = normaliseArray(firstVector,firstNormalisedVector,vectorLength);
   secondStateCheck = normaliseArray(secondVector,secondNormalisedVector,vectorLength);
@@ -241,7 +257,7 @@ int mergeMultipleArrays(double *inputMatrix, double *outputVector, int matrixWid
   }
   else
   {
-    normalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+    normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
     currentNumStates = normaliseArray(inputMatrix,normalisedVector,vectorLength);
   	for (i = 0; i < vectorLength; i++)
   	{
@@ -273,7 +289,7 @@ int mergeMultipleArraysArities(double *inputMatrix, double *outputVector, int ma
   }
   else
   { 
-    normalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+    normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
     currentNumStates = normaliseArray(inputMatrix,normalisedVector,vectorLength);
   	for (i = 0; i < vectorLength; i++)
   	{

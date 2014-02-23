@@ -1,6 +1,7 @@
 #makefile for MIToolbox
 #Author: Adam Pocock, apocock@cs.man.ac.uk
 #Created 11/3/2010
+#Updated 22/2/2014 - Added make install
 #
 #
 #Copyright 2010 Adam Pocock, The University Of Manchester

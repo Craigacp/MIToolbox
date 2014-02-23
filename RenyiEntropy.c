@@ -1,5 +1,5 @@
 /*******************************************************************************
-** RenyiEntropy.cpp
+** RenyiEntropy.c
 ** Part of the mutual information toolbox
 **
 ** Contains functions to calculate the Renyi alpha entropy of a single variable 
@@ -8,8 +8,9 @@
 ** 
 ** Author: Adam Pocock
 ** Created 26/3/2010
+** Updated - 22/02/2014 - Added checking on calloc.
 **
-**  Copyright 2010 Adam Pocock, The University Of Manchester
+**  Copyright 2010-2014 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox.
@@ -111,8 +112,8 @@ double calcCondRenyiEnt(double alpha, double *dataVector, double *conditionVecto
   ** first generate the seperate variables
   */
   
-  double *seperateVectors = (double *) CALLOC_FUNC(uniqueInCondVector*vectorLength,sizeof(double));
-  int *seperateVectorCount = (int *) CALLOC_FUNC(uniqueInCondVector,sizeof(int));
+  double *seperateVectors = (double *) checkedCalloc(uniqueInCondVector*vectorLength,sizeof(double));
+  int *seperateVectorCount = (int *) checkedCalloc(uniqueInCondVector,sizeof(int));
   double seperateVectorProb = 0.0;
   int i,j;
   double entropy = 0.0;
@@ -121,7 +122,7 @@ double calcCondRenyiEnt(double alpha, double *dataVector, double *conditionVecto
   double tempEntropy;
   ProbabilityState state;
   
-  double **seperateVectors2D = (double **) CALLOC_FUNC(uniqueInCondVector,sizeof(double*));
+  double **seperateVectors2D = (double **) checkedCalloc(uniqueInCondVector,sizeof(double*));
   for(j=0; j < uniqueInCondVector; j++)
     seperateVectors2D[j] = seperateVectors + (int)j*vectorLength;
   

@@ -77,7 +77,7 @@ double calculateWeightedConditionalMutualInformation(double *dataVector, double 
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  double *mergedVector = (double *) CALLOC_FUNC(vectorLength,sizeof(double));
+  double *mergedVector = (double *) checkedCalloc(vectorLength,sizeof(double));
   
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   

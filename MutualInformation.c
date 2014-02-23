@@ -9,8 +9,9 @@
 ** 
 ** Author: Adam Pocock
 ** Created 19/2/2010
+** Updated - 22/02/2014 - Added checking on calloc.
 **
-**  Copyright 2010 Adam Pocock, The University Of Manchester
+**  Copyright 2010-2014 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox.
@@ -76,7 +77,7 @@ double calculateConditionalMutualInformation(double *dataVector, double *targetV
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  double *mergedVector = (double *) CALLOC_FUNC(vectorLength,sizeof(double));
+  double *mergedVector = (double *) checkedCalloc(vectorLength,sizeof(double));
   
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   

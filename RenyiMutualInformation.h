@@ -47,10 +47,11 @@ extern "C" {
 *******************************************************************************/
 double calculateRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength);
 
-/* This function returns a different value to the alpha divergence mutual 
-** information, and thus is not a correct mutual information
+/****************************************************************************** 
+** This function returns a different value to the alpha divergence mutual 
+** information, and thus is not a correct mutual information.
+******************************************************************************/
 double calculateRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength);
-*/
 
 #ifdef __cplusplus
 }

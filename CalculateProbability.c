@@ -7,9 +7,10 @@
 ** 
 ** Author: Adam Pocock
 ** Created: 17/02/2010
-** Modified: 04/07/2011 - added weighted probability functions
+** Modified - 04/07/2011 - added weighted probability functions
+** Updated - 22/02/2014 - Added checking on calloc.
 **
-**  Copyright 2010/2011 Adam Pocock, The University Of Manchester
+**  Copyright 2010-2014 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox.
@@ -50,20 +51,20 @@ JointProbabilityState calculateJointProbability(double *firstVector, double *sec
   double length = vectorLength;
   JointProbabilityState state;
 
-  firstNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
-  secondNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   firstNumStates = normaliseArray(firstVector,firstNormalisedVector,vectorLength);
   secondNumStates = normaliseArray(secondVector,secondNormalisedVector,vectorLength);
   jointNumStates = firstNumStates * secondNumStates;
   
-  firstStateCounts = (int *) CALLOC_FUNC(firstNumStates,sizeof(int));
-  secondStateCounts = (int *) CALLOC_FUNC(secondNumStates,sizeof(int));
-  jointStateCounts = (int *) CALLOC_FUNC(jointNumStates,sizeof(int));
+  firstStateCounts = (int *) checkedCalloc(firstNumStates,sizeof(int));
+  secondStateCounts = (int *) checkedCalloc(secondNumStates,sizeof(int));
+  jointStateCounts = (int *) checkedCalloc(jointNumStates,sizeof(int));
   
-  firstStateProbs = (double *) CALLOC_FUNC(firstNumStates,sizeof(double));
-  secondStateProbs = (double *) CALLOC_FUNC(secondNumStates,sizeof(double));
-  jointStateProbs = (double *) CALLOC_FUNC(jointNumStates,sizeof(double));
+  firstStateProbs = (double *) checkedCalloc(firstNumStates,sizeof(double));
+  secondStateProbs = (double *) checkedCalloc(secondNumStates,sizeof(double));
+  jointStateProbs = (double *) checkedCalloc(jointNumStates,sizeof(double));
     
   /* optimised version, less numerically stable
   double fractionalState = 1.0 / vectorLength;
@@ -153,24 +154,24 @@ WeightedJointProbState calculateWeightedJointProbability(double *firstVector, do
   double length = vectorLength;
   WeightedJointProbState state;
 
-  firstNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
-  secondNormalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   firstNumStates = normaliseArray(firstVector,firstNormalisedVector,vectorLength);
   secondNumStates = normaliseArray(secondVector,secondNormalisedVector,vectorLength);
   jointNumStates = firstNumStates * secondNumStates;
   
-  firstStateCounts = (int *) CALLOC_FUNC(firstNumStates,sizeof(int));
-  secondStateCounts = (int *) CALLOC_FUNC(secondNumStates,sizeof(int));
-  jointStateCounts = (int *) CALLOC_FUNC(jointNumStates,sizeof(int));
+  firstStateCounts = (int *) checkedCalloc(firstNumStates,sizeof(int));
+  secondStateCounts = (int *) checkedCalloc(secondNumStates,sizeof(int));
+  jointStateCounts = (int *) checkedCalloc(jointNumStates,sizeof(int));
   
-  firstStateProbs = (double *) CALLOC_FUNC(firstNumStates,sizeof(double));
-  secondStateProbs = (double *) CALLOC_FUNC(secondNumStates,sizeof(double));
-  jointStateProbs = (double *) CALLOC_FUNC(jointNumStates,sizeof(double));
+  firstStateProbs = (double *) checkedCalloc(firstNumStates,sizeof(double));
+  secondStateProbs = (double *) checkedCalloc(secondNumStates,sizeof(double));
+  jointStateProbs = (double *) checkedCalloc(jointNumStates,sizeof(double));
     
-  firstWeightVec = (double *) CALLOC_FUNC(firstNumStates,sizeof(double));
-  secondWeightVec = (double *) CALLOC_FUNC(secondNumStates,sizeof(double));
-  jointWeightVec = (double *) CALLOC_FUNC(jointNumStates,sizeof(double));
+  firstWeightVec = (double *) checkedCalloc(firstNumStates,sizeof(double));
+  secondWeightVec = (double *) checkedCalloc(secondNumStates,sizeof(double));
+  jointWeightVec = (double *) checkedCalloc(jointNumStates,sizeof(double));
     
   for (i = 0; i < vectorLength; i++)
   {
@@ -261,12 +262,12 @@ ProbabilityState calculateProbability(double *dataVector, int vectorLength)
   int i;
   double length = vectorLength;
 
-  normalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+  normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   numStates = normaliseArray(dataVector,normalisedVector,vectorLength);
   
-  stateCounts = (int *) CALLOC_FUNC(numStates,sizeof(int));
-  stateProbs = (double *) CALLOC_FUNC(numStates,sizeof(double));
+  stateCounts = (int *) checkedCalloc(numStates,sizeof(int));
+  stateProbs = (double *) checkedCalloc(numStates,sizeof(double));
   
   /* optimised version, may have floating point problems 
   fractionalState = 1.0 / vectorLength;
@@ -312,13 +313,13 @@ WeightedProbState calculateWeightedProbability(double *dataVector, double *examp
   int i;
   double length = vectorLength;
 
-  normalisedVector = (int *) CALLOC_FUNC(vectorLength,sizeof(int));
+  normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   numStates = normaliseArray(dataVector,normalisedVector,vectorLength);
   
-  stateCounts = (int *) CALLOC_FUNC(numStates,sizeof(int));
-  stateProbs = (double *) CALLOC_FUNC(numStates,sizeof(double));
-  stateWeights = (double *) CALLOC_FUNC(numStates,sizeof(double));
+  stateCounts = (int *) checkedCalloc(numStates,sizeof(int));
+  stateProbs = (double *) checkedCalloc(numStates,sizeof(double));
+  stateWeights = (double *) checkedCalloc(numStates,sizeof(double));
 
   for (i = 0; i < vectorLength; i++)
   {

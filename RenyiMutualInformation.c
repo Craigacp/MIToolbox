@@ -1,5 +1,5 @@
 /*******************************************************************************
-** RenyiMutualInformation.cpp
+** RenyiMutualInformation.c
 ** Part of the mutual information toolbox
 **
 ** Contains functions to calculate the Renyi mutual information of 
@@ -30,6 +30,7 @@
 *******************************************************************************/
 
 #include "MIToolbox.h"
+#include "ArrayOperations.h"
 #include "CalculateProbability.h"
 #include "RenyiEntropy.h"
 #include "RenyiMutualInformation.h"

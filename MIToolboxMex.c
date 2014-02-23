@@ -1,6 +1,6 @@
 /*******************************************************************************
 **
-**  MIToolboxMex.cpp
+**  MIToolboxMex.c
 **  is the MATLAB entry point for the MIToolbox functions when called from
 **  a MATLAB/OCTAVE script.
 **
@@ -23,6 +23,7 @@
 **  along with MIToolbox.  If not, see <http://www.gnu.org/licenses/>.
 **
 *******************************************************************************/
+
 #include "MIToolbox.h"
 #include "ArrayOperations.h"
 #include "CalculateProbability.h"
