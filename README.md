@@ -1,6 +1,6 @@
 MIToolbox
 =========
-v2.1 for C/C++ and MATLAB/Octave
+v2.1.1 for C/C++ and MATLAB/Octave
 
 MIToolbox contains a set of functions to calculate information theoretic
 quantities from data, such as the entropy and mutual information.  The toolbox
