@@ -101,3 +101,6 @@ install:
 	$(MAKE)
 	@echo "Installing libMIToolbox.so to $(PREFIX)/lib"
 	@cp -v libMIToolbox.so $(PREFIX)/lib
+	@mkdir -p $(PREFIX)/include/MIToolbox
+	@echo "Installing MIToolbox's header files to $(PREFIX)/include/MIToolbox"
+	@cp -v MIToolbox.h MutualInformation.h Entropy.h CalculateProbability.h ArrayOperations.h RenyiMutualInformation.h RenyiEntropy.h WeightedMutualInformation.h WeightedEntropy.h $(PREFIX)/include/MIToolbox/

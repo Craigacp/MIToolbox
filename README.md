@@ -66,13 +66,15 @@ To compile the library for use in MATLAB/OCTAVE, execute CompileMIToolbox.m
 from within MATLAB, or run 'make matlab' from a terminal.
 
 To compile the library for use with C programs run 'make x86' for a 32-bit
-library, or 'make x64' for a 64-bit library. 
+library, or 'make x64' for a 64-bit library. Then run 'sudo make install' to
+install MIToolbox into /usr/local/lib & /usr/local/include.
 
 The C source files are licensed under the LGPL v3. The MATLAB wrappers and 
 demonstration feature selection algorithms are provided as is with no warranty 
 as examples of how to use the library in MATLAB.
 
 Update History
+ - 02/02/2015 - v2.1.1 - Fixed up the Makefile so it installs the headers too.
  - 22/02/2014 - v2.1  - Fixed a couple of bugs related to memory handling.
                      Added a make install for compatibility with PyFeast.
  - 30/07/2011 - v2.00 - Added implementations of the weighted entropy and weighted
