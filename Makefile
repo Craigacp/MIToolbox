@@ -30,7 +30,7 @@ objects = ArrayOperations.o CalculateProbability.o Entropy.o \
 		  WeightedEntropy.o WeightedMutualInformation.o
           
 libMIToolbox.so : $(objects)
-	$(COMPILER) $(CXXFLAGS) -shared -o libMIToolbox.so $(objects)
+	$(COMPILER) $(CXXFLAGS) -shared -o libMIToolbox.so $(objects) -lm
 
 WeightedMutualInformation.o: WeightedMutualInformation.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h WeightedEntropy.h
