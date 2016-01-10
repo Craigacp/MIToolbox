@@ -7,6 +7,9 @@ function output = mi(X,Y)
 %
 %returns the mutual information between X and Y, I(X;Y)
 
+if (~isa(X,'double') || ~isa(Y,'double'))
+  error('Error, inputs must be double vectors or matrices')
+end
 if (size(X,2)>1)
   mergedFirst = MIToolboxMex(3,X);
 else

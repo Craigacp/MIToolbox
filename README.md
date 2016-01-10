@@ -14,6 +14,8 @@ These functions are targeted for use with feature selection algorithms rather
 than communication channels and so expect all the data to be available before 
 execution and sample their own probability distributions from the data.
 
+All functions expect the inputs to be vectors or matrices of doubles.
+
 Functions contained:
  - Entropy
  - Conditional Entropy
@@ -33,25 +35,31 @@ Note: all functions are calculated in log base 2, so return units of "bits".
 
 Examples:
 
+```
 >> y = [1 1 1 0 0]';
 >> x = [1 0 1 1 0]';
-
+```
+```
 >> mi(x,y)       %% mutual information I(X;Y)
 ans =
     0.0200
-
+```
+```
 >> h(x)          %% entropy H(X)
 ans =
     0.9710
-
+```
+```
 >> condh(x,y)    %% conditional entropy H(X|Y)
 ans =
     0.9510
-
+```
+```
 >> h( [x,y] )    %% joint entropy H(X,Y)
 ans =
     1.9219
-
+```
+```
 >> joint([x,y])  %% joint random variable XY
 ans =
      1
@@ -59,7 +67,7 @@ ans =
      1
      3
      4
-
+```
 ======
 
 To compile the library for use in MATLAB/OCTAVE, execute CompileMIToolbox.m
@@ -72,6 +80,7 @@ install MIToolbox into /usr/local/lib & /usr/local/include.
 All code is licensed under the 3-clause BSD license.
 
 Update History
+ - 10/01/2016 - v2.1.2 - Relicense from LGPL to BSD. Added checks to ensure input MATLAB types are doubles.
  - 02/02/2015 - v2.1.1 - Fixed up the Makefile so it installs the headers too.
  - 22/02/2014 - v2.1  - Fixed a couple of bugs related to memory handling.
                      Added a make install for compatibility with PyFeast.

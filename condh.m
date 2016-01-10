@@ -8,18 +8,24 @@ function output = condh(X,Y)
 %returns the conditional entropy of X given Y, H(X|Y)
 
 if nargin == 2
+  if (~isa(X,'double') || ~isa(Y,'double'))
+    error('Error, inputs must be double vectors or matrices')
+  end
   if (size(X,2)>1)
-	  mergedFirst = MIToolboxMex(3,X);
+    mergedFirst = MIToolboxMex(3,X);
   else
-	  mergedFirst = X;
+	mergedFirst = X;
   end
   if (size(Y,2)>1)
-	  mergedSecond = MIToolboxMex(3,Y);
+	mergedSecond = MIToolboxMex(3,Y);
   else
-	  mergedSecond = Y;
+	mergedSecond = Y;
   end
   [output] = MIToolboxMex(6,mergedFirst,mergedSecond);
 elseif nargin == 1
+  if (~isa(X,'double'))
+    error('Error, inputs must be double vectors or matrices')
+  end
   output = h(X);
 else
   output = 0;

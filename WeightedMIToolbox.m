@@ -23,6 +23,12 @@ function [varargout] = WeightedMIToolbox(functionName, weightVector, varargin)
 %Mutual Information   = 4
 %Conditional MI       = 5
 
+for i = 1:length(varargin)
+    if (~isa(varargin{i},'double'))
+        error('Error, MIToolbox requires inputs to be double vector or matrices')
+    end
+end
+
 if (strcmpi(functionName,'Entropy') || strcmpi(functionName,'h'))
     %disp('Calculating Entropy');
     if (size(varargin{1},2)>1)

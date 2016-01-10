@@ -5,9 +5,12 @@ function output = h(X)
 %
 %returns the entropy of X, H(X)
 
+if (~isa(X,'double'))
+  error('Error, inputs must be double vectors or matrices')
+end
 if (size(X,2)>1)
-	mergedVector = MIToolboxMex(3,X);
+  mergedVector = MIToolboxMex(3,X);
 else
-	mergedVector = X;
+  mergedVector = X;
 end
 [output] = MIToolboxMex(4,mergedVector);

@@ -17,6 +17,12 @@ function [varargout] = RenyiMIToolbox(functionName, alpha, varargin)
 %Renyi Entropy = 1;
 %Renyi MI = 3;
 
+for i = 1:length(varargin)
+    if (~isa(varargin{i},'double'))
+        error('Error, MIToolbox requires inputs to be double vector or matrices')
+    end
+end
+
 if (alpha ~= 1)
   if (strcmpi(functionName,'Entropy') || strcmpi(functionName,'h'))
       %disp('Calculating Entropy');

@@ -26,6 +26,12 @@ function [varargout] = MIToolbox(functionName, varargin)
 %Mutual Information   = 7
 %Conditional MI       = 8
 
+for i = 1:length(varargin)
+    if (~isa(varargin{i},'double'))
+        error('Error, MIToolbox requires inputs to be double vector or matrices')
+    end
+end
+
 if (strcmpi(functionName,'Joint') || strcmpi(functionName,'Merge'))
     [varargout{1}] = MIToolboxMex(3,varargin{1});
 elseif (strcmpi(functionName,'Entropy') || strcmpi(functionName,'h'))
