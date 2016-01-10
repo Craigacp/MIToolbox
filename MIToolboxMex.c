@@ -1,27 +1,12 @@
 /*******************************************************************************
+** MIToolboxMex.c
+** is the MATLAB entry point for the MIToolbox functions when called from
+** a MATLAB/OCTAVE script.
 **
-**  MIToolboxMex.c
-**  is the MATLAB entry point for the MIToolbox functions when called from
-**  a MATLAB/OCTAVE script.
+** Copyright 2010 Adam Pocock, The University Of Manchester
+** www.cs.manchester.ac.uk
 **
-**  Copyright 2010 Adam Pocock, The University Of Manchester
-**  www.cs.manchester.ac.uk
-**
-**  This file is part of MIToolbox.
-**
-**  MIToolbox is free software: you can redistribute it and/or modify
-**  it under the terms of the GNU Lesser General Public License as published by
-**  the Free Software Foundation, either version 3 of the License, or
-**  (at your option) any later version.
-**
-**  MIToolbox is distributed in the hope that it will be useful,
-**  but WITHOUT ANY WARRANTY; without even the implied warranty of
-**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-**  GNU Lesser General Public License for more details.
-**
-**  You should have received a copy of the GNU Lesser General Public License
-**  along with MIToolbox.  If not, see <http://www.gnu.org/licenses/>.
-**
+** This file is part of MIToolbox, licensed under the 3-clause BSD license.
 *******************************************************************************/
 
 #include "MIToolbox.h"
@@ -31,11 +16,11 @@
 #include "MutualInformation.h"
 
 /*******************************************************************************
-**entry point for the mex call
-**nlhs - number of outputs
-**plhs - pointer to array of outputs
-**nrhs - number of inputs
-**prhs - pointer to array of inputs
+** entry point for the mex call
+** nlhs - number of outputs
+** plhs - pointer to array of outputs
+** nrhs - number of inputs
+** prhs - pointer to array of inputs
 *******************************************************************************/
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
