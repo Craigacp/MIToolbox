@@ -100,7 +100,6 @@ double calcCondRenyiEnt(double alpha, double *dataVector, double *conditionVecto
   
   double *seperateVectors = (double *) checkedCalloc(uniqueInCondVector*vectorLength,sizeof(double));
   int *seperateVectorCount = (int *) checkedCalloc(uniqueInCondVector,sizeof(int));
-  double seperateVectorProb = 0.0;
   int i,j;
   double entropy = 0.0;
   double tempValue = 0.0;
@@ -125,7 +124,6 @@ double calcCondRenyiEnt(double alpha, double *dataVector, double *conditionVecto
   for (j = 0; j < uniqueInCondVector; j++)
   {
     tempEntropy = 0.0;
-    seperateVectorProb = ((double)seperateVectorCount[j]) / vectorLength;
     state = calculateProbability(seperateVectors2D[j],seperateVectorCount[j]);
     
     /*H_\alpha(X) = 1/(1-alpha) * log(2)(sum p(x)^alpha)*/

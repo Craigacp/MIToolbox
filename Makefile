@@ -23,57 +23,57 @@
 #along with MIToolbox.  If not, see <http://www.gnu.org/licenses/>.
 
 PREFIX = /usr/local
-CXXFLAGS = -O3 -fPIC
+CFLAGS = -O3 -fPIC -std=c89 -Wall
 COMPILER = gcc
 objects = ArrayOperations.o CalculateProbability.o Entropy.o \
           MutualInformation.o RenyiEntropy.o RenyiMutualInformation.o \
 		  WeightedEntropy.o WeightedMutualInformation.o
           
 libMIToolbox.so : $(objects)
-	$(COMPILER) $(CXXFLAGS) -shared -o libMIToolbox.so $(objects) -lm
+	$(COMPILER) $(CFLAGS) -shared -o libMIToolbox.so $(objects) -lm
 
 WeightedMutualInformation.o: WeightedMutualInformation.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h WeightedEntropy.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c WeightedMutualInformation.c 
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c WeightedMutualInformation.c 
  
 WeightedEntropy.o: WeightedEntropy.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c WeightedEntropy.c
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c WeightedEntropy.c
 
 RenyiMutualInformation.o: RenyiMutualInformation.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h RenyiEntropy.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c RenyiMutualInformation.c 
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c RenyiMutualInformation.c 
  
 RenyiEntropy.o: RenyiEntropy.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c RenyiEntropy.c
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c RenyiEntropy.c
  
 MutualInformation.o: MutualInformation.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h Entropy.h MutualInformation.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c MutualInformation.c 
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c MutualInformation.c 
 	
 Entropy.o: Entropy.c MIToolbox.h ArrayOperations.h CalculateProbability.h \
  Entropy.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c Entropy.c
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c Entropy.c
 	
 CalculateProbability.o: CalculateProbability.c MIToolbox.h ArrayOperations.h \
  CalculateProbability.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c CalculateProbability.c
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c CalculateProbability.c
 	
 ArrayOperations.o: ArrayOperations.c MIToolbox.h ArrayOperations.h
-	$(COMPILER) $(CXXFLAGS) -DCOMPILE_C -c ArrayOperations.c
+	$(COMPILER) $(CFLAGS) -DCOMPILE_C -c ArrayOperations.c
 	
 .PHONY : debug
 debug:
-	$(MAKE) libMIToolbox.so "CXXFLAGS = -g -DDEBUG -fPIC"
+	$(MAKE) libMIToolbox.so "CFLAGS = -g -DDEBUG -fPIC"
 	
 .PHONY : x86
 x86:
-	$(MAKE) libMIToolbox.so "CXXFLAGS = -O3 -fPIC -m32"
+	$(MAKE) libMIToolbox.so "CFLAGS = -O3 -fPIC -m32"
 	
 .PHONY : x64
 x64:
-	$(MAKE) libMIToolbox.so "CXXFLAGS = -O3 -fPIC -m64"
+	$(MAKE) libMIToolbox.so "CFLAGS = -O3 -fPIC -m64"
 	
 .PHONY : matlab
 matlab:
@@ -89,7 +89,7 @@ matlab-debug:
 
 .PHONY : intel
 intel:
-	$(MAKE) libMIToolbox.so "COMPILER = icc" "CXXFLAGS = -O2 -fPIC -xHost"
+	$(MAKE) libMIToolbox.so "COMPILER = icc" "CFLAGS = -O2 -fPIC -xHost"
 
 .PHONY : clean
 clean:
