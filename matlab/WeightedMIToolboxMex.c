@@ -73,8 +73,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   ** 3 = H(X|Y)
   ** 4 = I(X;Y)
   ** 5 = I(X;Y|Z)
-  ** 6 = calculateWeightedProbability
-  ** 7 = calculateWeightedJointProbability
+  ** 6 = discAndCalcWeightedProbability
+  ** 7 = discAndCalcWeightedJointProbability
   */
   
   flag = *mxGetPr(prhs[0]);
@@ -100,8 +100,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       {
         if (numberOfSamples == weightLength)
         {
-          /*double calculateWeightedEntropy(double *dataVector, double *weightVector, int vectorLength);*/
-          *output = calculateWeightedEntropy(dataVector,weightVector,numberOfSamples);
+          /*double discAndCalcWeightedEntropy(double *dataVector, double *weightVector, int vectorLength);*/
+          *output = discAndCalcWeightedEntropy(dataVector,weightVector,numberOfSamples);
         }
         else
         {
@@ -140,16 +140,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if ((numberOfSamples == 0) && (weightLength == checkSamples))
         {
-          *output = calculateWeightedEntropy(secondVector,weightVector,numberOfSamples);
+          *output = discAndCalcWeightedEntropy(secondVector,weightVector,numberOfSamples);
         }
         else if ((checkSamples == 0) && (weightLength == numberOfSamples))
         {
-          *output = calculateWeightedEntropy(firstVector,weightVector,numberOfSamples);
+          *output = discAndCalcWeightedEntropy(firstVector,weightVector,numberOfSamples);
         }
         else if ((numberOfSamples == checkSamples) && (numberOfSamples == weightLength))
         {
-          /*double calculateWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength);*/
-          *output = calculateWeightedJointEntropy(firstVector,secondVector,weightVector,numberOfSamples);
+          /*double discAndCalcWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength);*/
+          *output = discAndCalcWeightedJointEntropy(firstVector,secondVector,weightVector,numberOfSamples);
         }
         else
         {
@@ -188,12 +188,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if ((checkSamples == 0) && (weightLength == numberOfSamples))
         {
-          *output = calculateWeightedEntropy(dataVector,weightVector,numberOfSamples);
+          *output = discAndCalcWeightedEntropy(dataVector,weightVector,numberOfSamples);
         }
         else if ((numberOfSamples == checkSamples) && (numberOfSamples == weightLength))
         {
-          /*double calculateWeightedConditionalEntropy(double *dataVector, double *condVector, double *weightVector, int vectorLength);*/
-          *output = calculateWeightedConditionalEntropy(dataVector,condVector,weightVector,numberOfSamples);
+          /*double discAndCalcWeightedConditionalEntropy(double *dataVector, double *condVector, double *weightVector, int vectorLength);*/
+          *output = discAndCalcWeightedConditionalEntropy(dataVector,condVector,weightVector,numberOfSamples);
         }
         else
         {
@@ -231,8 +231,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if ((numberOfSamples == checkSamples) && (numberOfSamples == weightLength))
         {
-          /*double calculateWeightedMutualInformation(double *firstVector, double *secondVector, double *weightVector, int vectorLength);*/
-          *output = calculateWeightedMutualInformation(firstVector,secondVector,weightVector,numberOfSamples);
+          /*double discAndCalcWeightedMutualInformation(double *firstVector, double *secondVector, double *weightVector, int vectorLength);*/
+          *output = discAndCalcWeightedMutualInformation(firstVector,secondVector,weightVector,numberOfSamples);
         }
         else
         {
@@ -275,12 +275,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         {
           if ((thirdCheckSamples == 0) || (thirdCheckFeatures != 1))
           {
-            *output = calculateWeightedMutualInformation(firstVector,targetVector,weightVector,numberOfSamples);
+            *output = discAndCalcWeightedMutualInformation(firstVector,targetVector,weightVector,numberOfSamples);
           }
           else if (numberOfSamples == thirdCheckSamples)
           {
-            /*double calculateWeightedConditionalMutualInformation(double *firstVector, double *targetVector, double *condVector, double *weightVector, int vectorLength);*/
-            *output = calculateWeightedConditionalMutualInformation(firstVector,targetVector,condVector,weightVector,numberOfSamples);
+            /*double discAndCalcWeightedConditionalMutualInformation(double *firstVector, double *targetVector, double *condVector, double *weightVector, int vectorLength);*/
+            *output = discAndCalcWeightedConditionalMutualInformation(firstVector,targetVector,condVector,weightVector,numberOfSamples);
           }
           else
           {
@@ -301,13 +301,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     case 6:
     {
       /*
-      **calculateWeightedProbability
+      **discAndCalcWeightedProbability
       */
       numberOfSamples = mxGetM(prhs[2]);
       dataVector = (double *) mxGetPr(prhs[2]);
 
-      /*WeightedProbabilityState calculateWeightedProbability(double *dataVector, double *weightVector, int vectorLength);*/
-      state = calculateWeightedProbability(dataVector,weightVector,numberOfSamples);
+      /*WeightedProbabilityState discAndCalcWeightedProbability(double *dataVector, double *weightVector, int vectorLength);*/
+      state = discAndCalcWeightedProbability(dataVector,weightVector,numberOfSamples);
       
       plhs[0] = mxCreateDoubleMatrix(state.numStates,1,mxREAL);
       plhs[1] = mxCreateDoubleMatrix(state.numStates,1,mxREAL);
@@ -325,18 +325,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       }
       
       break;
-    }/*case 6 - calculateWeightedProbability*/
+    }/*case 6 - discAndCalcWeightedProbability*/
     case 7:
     {
       /*
-      **calculateWeightedJointProbability
+      **discAndCalcWeightedJointProbability
       */
       numberOfSamples = mxGetM(prhs[2]);
       firstVector = (double *) mxGetPr(prhs[2]);
       secondVector = (double *) mxGetPr(prhs[3]);
 
-      /*JointProbabilityState calculateJointProbability(double *firstVector, double *secondVector, double *weightVector, int vectorLength);*/
-      jointState = calculateWeightedJointProbability(firstVector,secondVector,weightVector,numberOfSamples);
+      /*JointProbabilityState discAndCalcJointProbability(double *firstVector, double *secondVector, double *weightVector, int vectorLength);*/
+      jointState = discAndCalcWeightedJointProbability(firstVector,secondVector,weightVector,numberOfSamples);
       
       plhs[0] = mxCreateDoubleMatrix(jointState.numJointStates,1,mxREAL);
       plhs[1] = mxCreateDoubleMatrix(jointState.numJointStates,1,mxREAL);
@@ -379,7 +379,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       }
       
       break;
-    }/*case 7 - calculateWeightedJointProbability */
+    }/*case 7 - discAndCalcWeightedJointProbability */
     default:
     {
       printf("Unrecognised flag\n");

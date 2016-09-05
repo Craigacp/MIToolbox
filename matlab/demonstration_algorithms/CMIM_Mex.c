@@ -15,7 +15,8 @@
 *******************************************************************************/
 
 #include "mex.h"
-#include "MutualInformation.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/MutualInformation.h"
   
 void CMIMCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMatrix, double *classColumn, double *outputFeatures)
 {
@@ -43,7 +44,7 @@ void CMIMCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
   
   for (i = 0; i < noOfFeatures;i++)
   {
-    classMI[i] = calculateMutualInformation(feature2D[i], classColumn, noOfSamples);
+    classMI[i] = discAndCalcMutualInformation(feature2D[i], classColumn, noOfSamples);
     
     if (classMI[i] > maxMI)
     {
@@ -69,9 +70,9 @@ void CMIMCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
     {
       while ((classMI[j] > score) && (lastUsedFeature[j] < i))
       {
-        /*double calculateConditionalMutualInformation(double *firstVector, double *targetVector, double *conditionVector, int vectorLength);*/
+        /*double discAndCalcConditionalMutualInformation(double *firstVector, double *targetVector, double *conditionVector, int vectorLength);*/
         currentFeature = (int) outputFeatures[lastUsedFeature[j]];
-        conditionalInfo = calculateConditionalMutualInformation(feature2D[j],classColumn,feature2D[currentFeature],noOfSamples);
+        conditionalInfo = discAndCalcConditionalMutualInformation(feature2D[j],classColumn,feature2D[currentFeature],noOfSamples);
         if (classMI[j] > conditionalInfo)
         {
           classMI[j] = conditionalInfo;

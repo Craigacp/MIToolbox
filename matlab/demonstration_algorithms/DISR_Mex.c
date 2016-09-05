@@ -15,9 +15,10 @@
 *******************************************************************************/
 
 #include "mex.h"
-#include "MutualInformation.h"
-#include "Entropy.h"
-#include "ArrayOperations.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/MutualInformation.h"
+#include "MIToolbox/Entropy.h"
+#include "MIToolbox/ArrayOperations.h"
 
 void DISRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMatrix, double *classColumn, double *outputFeatures)
 {
@@ -38,12 +39,15 @@ void DISRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
   double score, currentScore, totalFeatureMI;
   int currentHighestFeature;
   
-  double *mergedVector = (double *) mxCalloc(noOfSamples,sizeof(double));
+  int *mergedVector = (int *) mxCalloc(noOfSamples,sizeof(int));
+  int *classColumnInt = (int *) mxCalloc(noOfSamples,sizeof(int));
   
   int arrayPosition;
   double mi, tripEntropy;
   
   int i,j,x;
+
+  normaliseArray(classColumn,classColumnInt,noOfSamples);
   
   for(j = 0; j < noOfFeatures; j++)
   {
@@ -55,13 +59,12 @@ void DISRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
     featureMIMatrix[i] = -1;
   }/*for featureMIMatrix - blank to -1*/
 
-
   for (i = 0; i < noOfFeatures;i++)
   {    
     /*calculate mutual info
-    **double calculateMutualInformation(double *firstVector, double *secondVector, int vectorLength);
+    **double discAndCalcMutualInformation(double *firstVector, double *secondVector, int vectorLength);
     */
-    classMI[i] = calculateMutualInformation(feature2D[i], classColumn, noOfSamples);
+    classMI[i] = discAndCalcMutualInformation(feature2D[i], classColumn, noOfSamples);
     
     if (classMI[i] > maxMI)
     {
@@ -100,13 +103,13 @@ void DISRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
           if (featureMIMatrix[arrayPosition] == -1)
           {
             /*
-            **double calculateMutualInformation(double *firstVector, double *secondVector, int vectorLength);
-            **double calculateJointEntropy(double *firstVector, double *secondVector, int vectorLength);
+            **double calcMutualInformation(double *firstVector, double *secondVector, int vectorLength);
+            **double calcJointEntropy(double *firstVector, double *secondVector, int vectorLength);
             */
             
-            mergeArrays(feature2D[(int) outputFeatures[x]], feature2D[j],mergedVector,noOfSamples);
-            mi = calculateMutualInformation(mergedVector, classColumn, noOfSamples);
-            tripEntropy = calculateJointEntropy(mergedVector, classColumn, noOfSamples);
+            discAndMergeArrays(feature2D[(int) outputFeatures[x]], feature2D[j],mergedVector,noOfSamples);
+            mi = calcMutualInformation(mergedVector, classColumnInt, noOfSamples);
+            tripEntropy = calcJointEntropy(mergedVector, classColumnInt, noOfSamples);
             
             featureMIMatrix[arrayPosition] = mi / tripEntropy;
           }/*if not already known*/

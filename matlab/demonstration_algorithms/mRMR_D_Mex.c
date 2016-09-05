@@ -15,14 +15,15 @@
 *******************************************************************************/
 
 #include "mex.h"
-#include "MutualInformation.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/MutualInformation.h"
 
 void mRMRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMatrix, double *classColumn, double *outputFeatures)
 {
   double **feature2D = (double**) mxCalloc(noOfFeatures,sizeof(double*));
   /*holds the class MI values*/
-  double *classMI = (double *)mxCalloc(noOfFeatures,sizeof(double));
-  int *selectedFeatures = (int *)mxCalloc(noOfFeatures,sizeof(int));
+  double *classMI = (double *) mxCalloc(noOfFeatures,sizeof(double));
+  int *selectedFeatures = (int *) mxCalloc(noOfFeatures,sizeof(int));
   /*holds the intra feature MI values*/
   int sizeOfMatrix = k*noOfFeatures;
   double *featureMIMatrix = (double *)mxCalloc(sizeOfMatrix,sizeof(double));
@@ -50,7 +51,7 @@ void mRMRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
 
   for (i = 0; i < noOfFeatures;i++)
   {
-    classMI[i] = calculateMutualInformation(feature2D[i], classColumn, noOfSamples);
+    classMI[i] = discAndCalcMutualInformation(feature2D[i], classColumn, noOfSamples);
     if (classMI[i] > maxMI)
     {
       maxMI = classMI[i];
@@ -93,8 +94,8 @@ void mRMRCalculation(int k, int noOfSamples, int noOfFeatures,double *featureMat
           {
             /*work out intra MI*/
             
-            /*double calculateMutualInformation(double *firstVector, double *secondVector, int vectorLength);*/
-            featureMIMatrix[arrayPosition] = calculateMutualInformation(feature2D[(int) outputFeatures[x]], feature2D[j], noOfSamples);
+            /*double discAndCalcMutualInformation(double *firstVector, double *secondVector, int vectorLength);*/
+            featureMIMatrix[arrayPosition] = discAndCalcMutualInformation(feature2D[(int) outputFeatures[x]], feature2D[j], noOfSamples);
           }
           
           totalFeatureMI += featureMIMatrix[arrayPosition];

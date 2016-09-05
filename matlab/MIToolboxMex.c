@@ -34,7 +34,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   int flag, i, numberOfSamples, checkSamples, thirdCheckSamples, numberOfFeatures, checkFeatures, thirdCheckFeatures;
   int  numArities, errorTest;
   double *dataVector, *condVector, *targetVector, *firstVector, *secondVector, *output, *numStates;
-  double *matrix, *mergedVector, *arities;
+  double *matrix, *arities;
+  int *mergedVector;
   int *outputIntVector, *intArities;
   
   double *jointOutput, *numJointStates, *firstOutput, *numFirstStates, *secondOutput, *numSecondStates;
@@ -51,12 +52,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   {
     case 2:
     {
-        /*printf("Must be H(X), calculateProbability(X), merge(X), normaliseArray(X)\n");*/
+        /*printf("Must be H(X), discAndCalcProbability(X), merge(X), normaliseArray(X)\n");*/
         break;
     }
     case 3:
     {
-        /*printf("Must be H(XY), H(X|Y), calculateJointProbability(XY), I(X;Y)\n");*/
+        /*printf("Must be H(XY), H(X|Y), discAndCalcJointProbability(XY), I(X;Y)\n");*/
         break;
     }
     case 4:
@@ -72,8 +73,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   }
   
   /* number to function map
-  ** 1 = calculateProbability
-  ** 2 = calculateJointProbability
+  ** 1 = discAndCalcProbability
+  ** 2 = discAndCalcJointProbability
   ** 3 = mergeArrays
   ** 4 = H(X)
   ** 5 = H(XY)
@@ -90,13 +91,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     case 1:
     {
       /*
-      **calculateProbability
+      **discAndCalcProbability
       */
       numberOfSamples = mxGetM(prhs[1]);
       dataVector = (double *) mxGetPr(prhs[1]);
 
-      /*ProbabilityState calculateProbability(double *dataVector, int vectorLength);*/
-      state = calculateProbability(dataVector,numberOfSamples);
+      /*ProbabilityState discAndCalcProbability(double *dataVector, int vectorLength);*/
+      state = discAndCalcProbability(dataVector,numberOfSamples);
       
       plhs[0] = mxCreateDoubleMatrix(state.numStates,1,mxREAL);
       plhs[1] = mxCreateDoubleMatrix(1,1,mxREAL);
@@ -109,20 +110,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       {
         output[i] = state.probabilityVector[i];
       }
+
+      freeProbabilityState(state);
       
       break;
-    }/*case 1 - calculateProbability*/
+    }/*case 1 - discAndCalcProbability*/
     case 2:
     {
       /*
-      **calculateJointProbability
+      **discAndCalcJointProbability
       */
       numberOfSamples = mxGetM(prhs[1]);
       firstVector = (double *) mxGetPr(prhs[1]);
       secondVector = (double *) mxGetPr(prhs[2]);
 
-      /*JointProbabilityState calculateJointProbability(double *firstVector, double *secondVector int vectorLength);*/
-      jointState = calculateJointProbability(firstVector,secondVector,numberOfSamples);
+      /*JointProbabilityState discAndCalcJointProbability(double *firstVector, double *secondVector int vectorLength);*/
+      jointState = discAndCalcJointProbability(firstVector,secondVector,numberOfSamples);
       
       plhs[0] = mxCreateDoubleMatrix(jointState.numJointStates,1,mxREAL);
       plhs[1] = mxCreateDoubleMatrix(1,1,mxREAL);
@@ -153,9 +156,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       {
         secondOutput[i] = jointState.secondProbabilityVector[i];
       }
+
+      freeJointProbabilityState(jointState);
       
       break;
-    }/*case 2 - calculateJointProbability */
+    }/*case 2 - discAndCalcJointProbability */
     case 3:
     {
       /*
@@ -181,7 +186,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         if ((numberOfFeatures > 0) && (numberOfSamples > 0))
         { 
           matrix = (double *) mxGetPr(prhs[1]);
-          mergedVector = (double *) mxCalloc(numberOfSamples,sizeof(double));
+          mergedVector = (int *) mxCalloc(numberOfSamples,sizeof(int));
             
           plhs[0] = mxCreateDoubleMatrix(numberOfSamples,1,mxREAL);
           output = (double *)mxGetPr(plhs[0]);
@@ -203,7 +208,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         { 
           
           matrix = (double *) mxGetPr(prhs[1]);
-          mergedVector = (double *) mxCalloc(numberOfSamples,sizeof(double));
+          mergedVector = (int *) mxCalloc(numberOfSamples,sizeof(int));
           
           arities = (double *) mxGetPr(prhs[2]);
           intArities = (int *) mxCalloc(numberOfFeatures,sizeof(int));
@@ -255,8 +260,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
       if (numberOfFeatures == 1)
       {
-        /*double calculateEntropy(double *dataVector, int vectorLength);*/
-        *output = calculateEntropy(dataVector,numberOfSamples);
+        /*double discAndCalcEntropy(double *dataVector, int vectorLength);*/
+        *output = discAndCalcEntropy(dataVector,numberOfSamples);
       }
       else
       {
@@ -292,16 +297,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if (numberOfSamples == 0)
         {
-          *output = calculateEntropy(secondVector,numberOfSamples);
+          *output = discAndCalcEntropy(secondVector,numberOfSamples);
         }
         else if (checkSamples == 0)
         {
-          *output = calculateEntropy(firstVector,numberOfSamples);
+          *output = discAndCalcEntropy(firstVector,numberOfSamples);
         }
         else if (numberOfSamples == checkSamples)
         {
-          /*double calculateJointEntropy(double *firstVector, double *secondVector, int vectorLength);*/
-          *output = calculateJointEntropy(firstVector,secondVector,numberOfSamples);
+          /*double discAndCalcJointEntropy(double *firstVector, double *secondVector, int vectorLength);*/
+          *output = discAndCalcJointEntropy(firstVector,secondVector,numberOfSamples);
         }
         else
         {
@@ -342,12 +347,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if (checkSamples == 0)
         {
-          *output = calculateEntropy(dataVector,numberOfSamples);
+          *output = discAndCalcEntropy(dataVector,numberOfSamples);
         }
         else if (numberOfSamples == checkSamples)
         {
-          /*double calculateConditionalEntropy(double *dataVector, double *condVector, int vectorLength);*/
-          *output = calculateConditionalEntropy(dataVector,condVector,numberOfSamples);
+          /*double discAndCalcConditionalEntropy(double *dataVector, double *condVector, int vectorLength);*/
+          *output = discAndCalcConditionalEntropy(dataVector,condVector,numberOfSamples);
         }
         else
         {
@@ -387,8 +392,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if (numberOfSamples == checkSamples)
         {
-          /*double calculateMutualInformation(double *firstVector, double *secondVector, int vectorLength);*/
-          *output = calculateMutualInformation(firstVector,secondVector,numberOfSamples);
+          /*double discAndCalcMutualInformation(double *firstVector, double *secondVector, int vectorLength);*/
+          *output = discAndCalcMutualInformation(firstVector,secondVector,numberOfSamples);
         }
         else
         {
@@ -431,12 +436,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if ((thirdCheckSamples == 0) || (thirdCheckFeatures != 1))
         {
-          *output = calculateMutualInformation(firstVector,targetVector,numberOfSamples);
+          *output = discAndCalcMutualInformation(firstVector,targetVector,numberOfSamples);
         }
         else if ((numberOfSamples == checkSamples) && (numberOfSamples == thirdCheckSamples))
         {
-          /*double calculateConditionalMutualInformation(double *firstVector, double *targetVector, double *condVector, int vectorLength);*/
-          *output = calculateConditionalMutualInformation(firstVector,targetVector,condVector,numberOfSamples);
+          /*double discAndCalcConditionalMutualInformation(double *firstVector, double *targetVector, double *condVector, int vectorLength);*/
+          *output = discAndCalcConditionalMutualInformation(firstVector,targetVector,condVector,numberOfSamples);
         }
         else
         {
@@ -473,6 +478,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       {
         output[i] = outputIntVector[i];
       }
+
+      mxFree(outputIntVector);
+      outputIntVector = NULL;
       
       break;
     }/*case 9 - normaliseArray*/

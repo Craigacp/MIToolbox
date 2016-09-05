@@ -83,8 +83,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
       if (numberOfFeatures == 1)
       {
-        /*double calculateRenyiEntropy(double alpha, double *dataVector, long vectorLength);*/
-        *output = calculateRenyiEntropy(alpha,dataVector,numberOfSamples);
+        /*double discAndCalcRenyiEntropy(double alpha, double *dataVector, long vectorLength);*/
+        *output = discAndCalcRenyiEntropy(alpha,dataVector,numberOfSamples);
       }
       else
       {
@@ -120,8 +120,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if (numberOfSamples == checkSamples)
         {
-          /*double calculateJointRenyiEntropy(double alpha, double *firstVector, double *secondVector, long vectorLength);*/
-          *output = calculateJointRenyiEntropy(alpha,firstVector,secondVector,numberOfSamples);
+          /*double discAndCalcJointRenyiEntropy(double alpha, double *firstVector, double *secondVector, long vectorLength);*/
+          *output = discAndCalcJointRenyiEntropy(alpha,firstVector,secondVector,numberOfSamples);
         }
         else
         {
@@ -163,8 +163,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         }
         else if (numberOfSamples == checkSamples)
         {
-          /*double calculateRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, long vectorLength);*/
-          *output = calculateRenyiMIDivergence(alpha,firstVector,secondVector,numberOfSamples);
+          /*double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, long vectorLength);*/
+          *output = discAndCalcRenyiMIDivergence(alpha,firstVector,secondVector,numberOfSamples);
         }
         else
         {
