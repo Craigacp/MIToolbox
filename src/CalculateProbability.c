@@ -16,9 +16,9 @@
 ** This file is part of MIToolbox, licensed under the 3-clause BSD license.
 *******************************************************************************/
 
-#include "MIToolbox.h"
-#include "ArrayOperations.h"
-#include "CalculateProbability.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/ArrayOperations.h"
+#include "MIToolbox/CalculateProbability.h"
 
 JointProbabilityState calculateJointProbability(double *firstVector, double *secondVector, int vectorLength)
 {

@@ -9,10 +9,10 @@
 ** This file is part of MIToolbox, licensed under the 3-clause BSD license.
 *******************************************************************************/
 
-#include "MIToolbox.h"
-#include "ArrayOperations.h"
-#include "RenyiEntropy.h"
-#include "RenyiMutualInformation.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/ArrayOperations.h"
+#include "MIToolbox/RenyiEntropy.h"
+#include "MIToolbox/RenyiMutualInformation.h"
 
 /*******************************************************************************
 **entry point for the mex call

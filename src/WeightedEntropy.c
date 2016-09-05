@@ -15,9 +15,9 @@
 ** This file is part of MIToolbox, licensed under the 3-clause BSD license.
 *******************************************************************************/
 
-#include "MIToolbox.h"
-#include "CalculateProbability.h"
-#include "WeightedEntropy.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/CalculateProbability.h"
+#include "MIToolbox/WeightedEntropy.h"
 
 double calculateWeightedEntropy(double *dataVector, double *weightVector, int vectorLength)
 {

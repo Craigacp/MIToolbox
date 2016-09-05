@@ -9,11 +9,11 @@
 ** This file is part of MIToolbox, licensed under the 3-clause BSD license.
 *******************************************************************************/
 
-#include "MIToolbox.h"
-#include "ArrayOperations.h"
-#include "CalculateProbability.h"
-#include "Entropy.h"
-#include "MutualInformation.h"
+#include "MIToolbox/MIToolbox.h"
+#include "MIToolbox/ArrayOperations.h"
+#include "MIToolbox/CalculateProbability.h"
+#include "MIToolbox/Entropy.h"
+#include "MIToolbox/MutualInformation.h"
 
 /*******************************************************************************
 ** entry point for the mex call
