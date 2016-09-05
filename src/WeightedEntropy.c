@@ -19,14 +19,12 @@
 #include "MIToolbox/CalculateProbability.h"
 #include "MIToolbox/WeightedEntropy.h"
 
-double calculateWeightedEntropy(double *dataVector, double *weightVector, int vectorLength)
-{
+double wEntropy(WeightedProbState state) {
   double entropy = 0.0;
   double tempValue = 0.0;
   int i;
-  WeightedProbState state = calculateWeightedProbability(dataVector,weightVector,vectorLength);
   
-  /*H(X) = - sum p(x) log p(x)*/
+  /*H_w(X) = - \sum_x w(x)p(x) \log p(x)*/
   for (i = 0; i < state.numStates; i++)
   {
     tempValue = state.probabilityVector[i];
@@ -38,23 +36,36 @@ double calculateWeightedEntropy(double *dataVector, double *weightVector, int ve
   }
   
   entropy /= log(LOG_BASE);
+
+  return entropy;
+}
+
+double calcWeightedEntropy(int *dataVector, double *weightVector, int vectorLength)
+{
+  WeightedProbState state = calculateWeightedProbability(dataVector,weightVector,vectorLength);
+  double entropy = wEntropy(state);
   
-  FREE_FUNC(state.probabilityVector);
-  state.probabilityVector = NULL;
-  FREE_FUNC(state.stateWeightVector);
-  state.stateWeightVector = NULL;
+  freeWeightedProbState(state);
   
   return entropy;
-}/*calculateWeightedEntropy(double *,double *,int)*/
+}/*calcWeightedEntropy(double *,double *,int)*/
 
-double calculateWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength)
+double discAndCalcWeightedEntropy(double *dataVector, double *weightVector, int vectorLength)
 {
+  WeightedProbState state = discAndCalcWeightedProbability(dataVector,weightVector,vectorLength);
+  double entropy = wEntropy(state);
+  
+  freeWeightedProbState(state);
+  
+  return entropy;
+}/*discAndCalcWeightedEntropy(double *,double *,int)*/
+
+double wJointEntropy(WeightedJointProbState state) {
   double jointEntropy = 0.0;  
   double tempValue = 0.0;
   int i;
-  WeightedJointProbState state = calculateWeightedJointProbability(firstVector,secondVector,weightVector,vectorLength);
-  
-  /*H(XY) = - sumx sumy p(xy) log p(xy)*/
+
+  /*H_w(X,Y) = - \sum_x \sum_y w(x,y) p(x,y) \log p(x,y)*/
   for (i = 0; i < state.numJointStates; i++)
   {
     tempValue = state.jointProbabilityVector[i];
@@ -65,37 +76,37 @@ double calculateWeightedJointEntropy(double *firstVector, double *secondVector, 
   }
   
   jointEntropy /= log(LOG_BASE);
+
+  return jointEntropy;
+}
+
+double calcWeightedJointEntropy(int *firstVector, int *secondVector, double *weightVector, int vectorLength)
+{
+  WeightedJointProbState state = calculateWeightedJointProbability(firstVector,secondVector,weightVector,vectorLength);
+  double jointEntropy = wJointEntropy(state);
   
-  FREE_FUNC(state.firstProbabilityVector);
-  state.firstProbabilityVector = NULL;
-  FREE_FUNC(state.secondProbabilityVector);
-  state.secondProbabilityVector = NULL;
-  FREE_FUNC(state.jointProbabilityVector);
-  state.jointProbabilityVector = NULL;
-  FREE_FUNC(state.firstWeightVector);
-  state.firstWeightVector = NULL;
-  FREE_FUNC(state.secondWeightVector);
-  state.secondWeightVector = NULL;
-  FREE_FUNC(state.jointWeightVector);
-  state.jointWeightVector = NULL;
+  freeWeightedJointProbState(state);
   
   return jointEntropy;
-}/*calculateWeightedJointEntropy(double *,double *,double *,int)*/
+}/*calcWeightedJointEntropy(int *,int *,double *,int)*/
 
-double calculateWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength)
+double discAndCalcWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength)
 {
-  /*
-  ** Conditional entropy
-  ** H(X|Y) = - sumx sumy p(xy) log p(xy)/p(y)
-  */
+  WeightedJointProbState state = discAndCalcWeightedJointProbability(firstVector,secondVector,weightVector,vectorLength);
+  double jointEntropy = wJointEntropy(state);
   
+  freeWeightedJointProbState(state);
+  
+  return jointEntropy;
+}/*discAndCalcWeightedJointEntropy(double *,double *,double *,int)*/
+
+double wCondEntropy(WeightedJointProbState state) {
   double condEntropy = 0.0;  
   double jointValue = 0.0;
   double condValue = 0.0;
   int i;
-  WeightedJointProbState state = calculateWeightedJointProbability(dataVector,conditionVector,weightVector,vectorLength);
   
-  /*H(X|Y) = - sumx sumy p(xy) log p(xy)/p(y)*/
+  /*H_w(X|Y) = - \sum_x \sum_y w(x,y)p(x,y) \log (p(x,y)/p(y))*/
   /* to index by numFirstStates use modulus of i
   ** to index by numSecondStates use integer division of i by numFirstStates
   */
@@ -111,20 +122,27 @@ double calculateWeightedConditionalEntropy(double *dataVector, double *condition
   
   condEntropy /= log(LOG_BASE);
   
-  FREE_FUNC(state.firstProbabilityVector);
-  state.firstProbabilityVector = NULL;
-  FREE_FUNC(state.secondProbabilityVector);
-  state.secondProbabilityVector = NULL;
-  FREE_FUNC(state.jointProbabilityVector);
-  state.jointProbabilityVector = NULL;
-  FREE_FUNC(state.firstWeightVector);
-  state.firstWeightVector = NULL;
-  FREE_FUNC(state.secondWeightVector);
-  state.secondWeightVector = NULL;
-  FREE_FUNC(state.jointWeightVector);
-  state.jointWeightVector = NULL;
+  return condEntropy;
+}
+
+double calcWeightedConditionalEntropy(int *dataVector, int *conditionVector, double *weightVector, int vectorLength)
+{
+  WeightedJointProbState state = calculateWeightedJointProbability(dataVector,conditionVector,weightVector,vectorLength);
+  double condEntropy = wCondEntropy(state);
+  
+  freeWeightedJointProbState(state);
   
   return condEntropy;
 
-}/*calculateWeightedConditionalEntropy(double *,double *,double *,int)*/
+}/*calcWeightedConditionalEntropy(int *,int *,double *,int)*/
 
+double discAndCalcWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength)
+{
+  WeightedJointProbState state = discAndCalcWeightedJointProbability(dataVector,conditionVector,weightVector,vectorLength);
+  double condEntropy = wCondEntropy(state);
+  
+  freeWeightedJointProbState(state);
+  
+  return condEntropy;
+
+}/*discAndCalcWeightedConditionalEntropy(double *,double *,double *,int)*/

@@ -11,7 +11,7 @@
 #This file is part of MIToolbox, licensed under the 3-clause BSD license.
 
 PREFIX = /usr/local
-CFLAGS = -O3 -fPIC -std=c89 -Wall
+CFLAGS = -O3 -fPIC -std=c89 -Wall -Werror
 INCLUDES = -Iinclude
 CC = gcc
 objects = build/ArrayOperations.o build/CalculateProbability.o \
@@ -26,7 +26,7 @@ build/%.o: src/%.c
 	@mkdir -p build
 	$(CC) $(CFLAGS) $(INCLUDES) -DCOMPILE_C -o build/$*.o -c $<
 	
-.PHONY : debug x86 x64 matlab matlab-debug intel install
+.PHONY : debug x86 x64 matlab matlab-debug intel install test
 debug:
 	$(MAKE) libMIToolbox.so "CFLAGS = -g -DDEBUG -fPIC"
 
@@ -50,3 +50,6 @@ install: libMIToolbox.so
 	@mkdir -p $(PREFIX)/include
 	@echo "Installing MIToolbox's header files to $(PREFIX)/include/MIToolbox"
 	@cp -rv include/MIToolbox $(PREFIX)/include/
+
+test:
+	$(CC) -std=c89 $(INCLUDES) -L. -o test.out test/testMIToolbox.c -lMIToolbox

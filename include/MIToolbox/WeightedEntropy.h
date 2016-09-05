@@ -18,33 +18,45 @@
 #ifndef __WeightedEntropy_H
 #define __WeightedEntropy_H
 
+#include "MIToolbox/CalculateProbability.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 /*******************************************************************************
-** calculateWeightedEntropy returns the entropy in log base 2 of dataVector
+** calculateWeightedEntropy returns the entropy in log base LOG_BASE of dataVector
 ** H_w(X), weighted by weightVector
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calculateWeightedEntropy(double *dataVector, double *weightVector, int vectorLength);
+double calcWeightedEntropy(int *dataVector, double *weightVector, int vectorLength);
+double discAndCalcWeightedEntropy(double *dataVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
-** calculateWeightedJointEntropy returns the entropy in log base 2 of the joint 
+** calculateWeightedJointEntropy returns the entropy in log base LOG_BASE of the joint 
 ** variable of firstVector and secondVector, H_w(XY), weighted by weightVector
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calculateWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength);
+double calcWeightedJointEntropy(int *firstVector, int *secondVector, double *weightVector, int vectorLength);
+double discAndCalcWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
-** calculateWeightedConditionalEntropy returns the entropy in log base 2 of 
+** calculateWeightedConditionalEntropy returns the entropy in log base LOG_BASE of 
 ** dataVector conditioned on conditionVector, H_w(X|Y), weighted by weightVector
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calculateWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength);
+double calcWeightedConditionalEntropy(int *dataVector, int *conditionVector, double *weightVector, int vectorLength);
+double discAndCalcWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength);
+
+/*******************************************************************************
+** Inner functions which operate on state structs.
+*******************************************************************************/
+double wEntropy(WeightedProbState state);
+double wJointEntropy(WeightedJointProbState state);
+double wCondEntropy(WeightedJointProbState state);
 
 #ifdef __cplusplus
 }

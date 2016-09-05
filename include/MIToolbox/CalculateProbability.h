@@ -63,17 +63,33 @@ typedef struct wpState
 ** It is the base operation for all information theory calculations involving 
 ** two or more variables.
 **
+** length(firstVector) == length(secondVector) == vectorLength
+** otherwise it will crash
+*******************************************************************************/
+JointProbabilityState calculateJointProbability(int *firstVector, int *secondVector, int vectorLength);
+
+/*******************************************************************************
+** discAndCalcJointProbability discretises the double vectors into int vectors,
+** then generates a JointProbabilityState.
+**
 ** length(firstVector) == length(secondVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-JointProbabilityState calculateJointProbability(double *firstVector, double *secondVector, int vectorLength);
+JointProbabilityState discAndCalcJointProbability(double *firstVector, double *secondVector, int vectorLength);
 
 /*******************************************************************************
 ** calculateWeightedJointProbability returns the same joint state object
 ** as calculateJointProbability, with additional weightVectors giving the 
 ** weight assigned to each state.
 *******************************************************************************/
-WeightedJointProbState calculateWeightedJointProbability(double *firstVector, double *secondVector, double *exampleWeightVector, int vectorLength);
+WeightedJointProbState calculateWeightedJointProbability(int *firstVector, int *secondVector, double *weightVector, int vectorLength);
+
+/*******************************************************************************
+** discAndCalcWeightedJointProbability returns the same joint state object
+** as discAndCalcJointProbability, with additional weightVectors giving the 
+** weight assigned to each state.
+*******************************************************************************/
+WeightedJointProbState discAndCalcWeightedJointProbability(double *firstVector, double *secondVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
 ** calculateProbability returns the probability vector from one vector.
@@ -83,14 +99,38 @@ WeightedJointProbState calculateWeightedJointProbability(double *firstVector, do
 ** length(dataVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-ProbabilityState calculateProbability(double *dataVector, int vectorLength);
+ProbabilityState calculateProbability(int *dataVector, int vectorLength);
+
+/*******************************************************************************
+** discAndCalcProbability discretises the double vector into an int vector,
+** then generates a ProbabilityState.
+**
+** length(dataVector) == vectorLength otherwise there
+** will be a segmentation fault
+*******************************************************************************/
+ProbabilityState discAndCalcProbability(double *dataVector, int vectorLength);
 
 /*******************************************************************************
 ** calculateWeightedProbability returns the same state object
 ** as calculateProbability, with an additional weightVector giving the 
 ** weight assigned to each state.
 *******************************************************************************/
-WeightedProbState calculateWeightedProbability(double *dataVector, double *exampleWeightVector, int vectorLength);
+WeightedProbState calculateWeightedProbability(int *dataVector, double *weightVector, int vectorLength);
+
+/*******************************************************************************
+** discAndCalcWeightedProbability returns the same state object
+** as discAndCalcProbability, with an additional weightVector giving the 
+** weight assigned to each state.
+*******************************************************************************/
+WeightedProbState discAndCalcWeightedProbability(double *dataVector, double *weightVector, int vectorLength);
+
+/*******************************************************************************
+** Frees the struct members and sets all pointers to NULL.
+*******************************************************************************/
+void freeProbabilityState(ProbabilityState state);
+void freeJointProbabilityState(JointProbabilityState state);
+void freeWeightedProbState(WeightedProbState state);
+void freeWeightedJointProbState(WeightedJointProbState state);
 
 #ifdef __cplusplus
 }

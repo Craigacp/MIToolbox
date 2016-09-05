@@ -14,21 +14,7 @@
 **  Copyright 2010/2011 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
-**  This file is part of MIToolbox.
-**
-**  MIToolbox is free software: you can redistribute it and/or modify
-**  it under the terms of the GNU Lesser General Public License as published by
-**  the Free Software Foundation, either version 3 of the License, or
-**  (at your option) any later version.
-**
-**  MIToolbox is distributed in the hope that it will be useful,
-**  but WITHOUT ANY WARRANTY; without even the implied warranty of
-**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-**  GNU Lesser General Public License for more details.
-**
-**  You should have received a copy of the GNU Lesser General Public License
-**  along with MIToolbox.  If not, see <http://www.gnu.org/licenses/>.
-**
+**  This file is part of MIToolbox, licensed under the 3-clause BSD license.
 *******************************************************************************/
 
 #include "MIToolbox/MIToolbox.h"
@@ -37,15 +23,13 @@
 #include "MIToolbox/WeightedEntropy.h"
 #include "MIToolbox/WeightedMutualInformation.h"
 
-double calculateWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength)
-{
+double wmi(WeightedJointProbState state) {
   double mutualInformation = 0.0;
   int firstIndex,secondIndex;
   int i;
-  WeightedJointProbState state = calculateWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
-    
+  
   /*
-  ** I(X;Y) = sum sum p(xy) * log (p(xy)/p(x)p(y))
+  ** I_w(X;Y) = \sum_x \sum_y w(x,y)p(x,y) * \log (p(x,y)/p(x)p(y))
   */
   for (i = 0; i < state.numJointStates; i++)
   {
@@ -62,29 +46,42 @@ double calculateWeightedMutualInformation(double *dataVector, double *targetVect
   }
   
   mutualInformation /= log(LOG_BASE);
-  
-  FREE_FUNC(state.firstProbabilityVector);
-  state.firstProbabilityVector = NULL;
-  FREE_FUNC(state.secondProbabilityVector);
-  state.secondProbabilityVector = NULL;
-  FREE_FUNC(state.jointProbabilityVector);
-  state.jointProbabilityVector = NULL;
+
+  return mutualInformation;
+}
+
+double calcWeightedMutualInformation(int *dataVector, int *targetVector, double *weightVector, int vectorLength)
+{
+  WeightedJointProbState state = calculateWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
+  double mutualInformation = wmi(state);
+    
+  freeWeightedJointProbState(state);
   
   return mutualInformation;
-}/*calculateWeightedMutualInformation(double *,double *,double *,int)*/
+}/*calcWeightedMutualInformation(int *,int *,double *,int)*/
 
-double calculateWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength)
+double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength)
+{
+  WeightedJointProbState state = discAndCalcWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
+  double mutualInformation = wmi(state);
+    
+  freeWeightedJointProbState(state);
+  
+  return mutualInformation;
+}/*discAndCalcWeightedMutualInformation(double *,double *,double *,int)*/
+
+double calcWeightedConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, double *weightVector, int vectorLength)
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  double *mergedVector = (double *) checkedCalloc(vectorLength,sizeof(double));
+  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   
   /* I(X;Y|Z) = H(X|Z) - H(X|YZ) */
   /* double calculateWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength); */
-  firstCondition = calculateWeightedConditionalEntropy(dataVector,conditionVector,weightVector,vectorLength);
-  secondCondition = calculateWeightedConditionalEntropy(dataVector,mergedVector,weightVector,vectorLength);
+  firstCondition = calcWeightedConditionalEntropy(dataVector,conditionVector,weightVector,vectorLength);
+  secondCondition = calcWeightedConditionalEntropy(dataVector,mergedVector,weightVector,vectorLength);
   
   mutualInformation = firstCondition - secondCondition;
   
@@ -94,3 +91,35 @@ double calculateWeightedConditionalMutualInformation(double *dataVector, double 
   return mutualInformation;
 }/*calculateWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/
 
+double discAndCalcWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength)
+{
+  double mutualInformation = 0.0;
+  double firstCondition, secondCondition;
+  int *dataNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  int *targetNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  int *conditionNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  
+  normaliseArray(dataVector,dataNormVector,vectorLength);
+  normaliseArray(targetVector,targetNormVector,vectorLength);
+  normaliseArray(conditionVector,conditionNormVector,vectorLength);
+  mergeArrays(targetNormVector,conditionNormVector,mergedVector,vectorLength);
+  
+  /* I_w(X;Y|Z) = H_w(X|Z) - H_w(X|YZ) */
+  /* double calculateWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength); */
+  firstCondition = calcWeightedConditionalEntropy(dataNormVector,conditionNormVector,weightVector,vectorLength);
+  secondCondition = calcWeightedConditionalEntropy(dataNormVector,mergedVector,weightVector,vectorLength);
+  
+  mutualInformation = firstCondition - secondCondition;
+  
+  FREE_FUNC(dataNormVector);
+  FREE_FUNC(targetNormVector);
+  FREE_FUNC(conditionNormVector);
+  FREE_FUNC(mergedVector);
+  dataNormVector = NULL;
+  targetNormVector = NULL;
+  conditionNormVector = NULL;
+  mergedVector = NULL;
+  
+  return mutualInformation;
+}/*discAndCalcWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/

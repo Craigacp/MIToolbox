@@ -18,12 +18,14 @@
 #ifndef __Renyi_MutualInformation_H
 #define __Renyi_MutualInformation_H
 
+#include "MIToolbox/CalculateProbability.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 /*******************************************************************************
-** calculateRenyiMIDivergence returns the log base 2 Renyi mutual information
+** calculateRenyiMIDivergence returns the log base LOG_BASE Renyi mutual information
 ** between dataVector and targetVector, I_{\alpha}(X;Y), for \alpha != 1
 ** This uses Renyi's generalised alpha divergence as the difference measure
 ** instead of the KL-divergence as in Shannon's Mutual Information
@@ -31,13 +33,21 @@ extern "C" {
 ** length(dataVector) == length(targetVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calculateRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength);
+double calcRenyiMIDivergence(double alpha, int *dataVector, int *targetVector, int vectorLength);
+double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength);
 
 /****************************************************************************** 
 ** This function returns a different value to the alpha divergence mutual 
 ** information, and thus is not a correct mutual information.
+** It is maintained to show how different Renyi's Information Theory is.
 ******************************************************************************/
-double calculateRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength);
+double calcRenyiMIJoint(double alpha, int *dataVector, int *targetVector, int vectorLength);
+double discAndCalcRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength);
+
+/*******************************************************************************
+** Inner functions which operate on state structs.
+*******************************************************************************/
+double renyiMI(JointProbabilityState state, double alpha);
 
 #ifdef __cplusplus
 }

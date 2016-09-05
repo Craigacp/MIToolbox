@@ -21,16 +21,13 @@
 #include "MIToolbox/RenyiEntropy.h"
 #include "MIToolbox/RenyiMutualInformation.h"
 
-double calculateRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength)
-{
-  double mutualInformation = 0.0;
+double renyiMI(JointProbabilityState state, double alpha) {
   int firstIndex,secondIndex;
   int i;
-  double jointTemp = 0.0;
-  double seperateTemp = 0.0;
+  double jointTemp, marginalTemp;
   double invAlpha = 1.0 - alpha;
-  JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
-    
+  double mutualInformation = 0.0;
+
   /* standard MI is D_KL(p(x,y)||p(x)p(y))
   ** which expands to
   ** D_KL(p(x,y)||p(x)p(y)) = sum(p(x,y) * log(p(x,y)/(p(x)p(y))))
@@ -48,35 +45,66 @@ double calculateRenyiMIDivergence(double alpha, double *dataVector, double *targ
     if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0))
     {      
       jointTemp = pow(state.jointProbabilityVector[i],alpha);
-      seperateTemp = state.firstProbabilityVector[firstIndex] * state.secondProbabilityVector[secondIndex];
-      seperateTemp = pow(seperateTemp,invAlpha);
-      mutualInformation += (jointTemp * seperateTemp);
+      marginalTemp = state.firstProbabilityVector[firstIndex] * state.secondProbabilityVector[secondIndex];
+      marginalTemp = pow(marginalTemp,invAlpha);
+      mutualInformation += (jointTemp * marginalTemp);
     }
   }
 
   mutualInformation = log(mutualInformation);
-  mutualInformation /= log(2.0);  
-  mutualInformation /= (alpha-1.0);  
+  mutualInformation /= log(LOG_BASE);  
+  mutualInformation /= (alpha-1.0); 
+
+  return mutualInformation;
+}
+
+double calcRenyiMIDivergence(double alpha, int *dataVector, int *targetVector, int vectorLength)
+{
+  JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
+  double mutualInformation = renyiMI(state,alpha);
   
-  FREE_FUNC(state.firstProbabilityVector);
-  state.firstProbabilityVector = NULL;
-  FREE_FUNC(state.secondProbabilityVector);
-  state.secondProbabilityVector = NULL;
-  FREE_FUNC(state.jointProbabilityVector);
-  state.jointProbabilityVector = NULL;
+  freeJointProbabilityState(state);
   
   return mutualInformation;
-}/*calculateRenyiMIDivergence(double, double *, double *, int)*/
+}/*calcRenyiMIDivergence(double, int *, int *, int)*/
 
-double calculateRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength)
+double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength)
 {
-  double hY = calculateRenyiEntropy(alpha, targetVector, vectorLength);
-  double hX = calculateRenyiEntropy(alpha, dataVector, vectorLength);
+  JointProbabilityState state = discAndCalcJointProbability(dataVector,targetVector,vectorLength);
+  double mutualInformation = renyiMI(state,alpha);
   
-  double hXY = calculateJointRenyiEntropy(alpha, dataVector, targetVector, vectorLength);
+  freeJointProbabilityState(state);
+  
+  return mutualInformation;
+}/*calcRenyiMIDivergence(double, double *, double *, int)*/
+
+double calcRenyiMIJoint(double alpha, int *dataVector, int *targetVector, int vectorLength)
+{
+  double hY = calcRenyiEntropy(alpha, targetVector, vectorLength);
+  double hX = calcRenyiEntropy(alpha, dataVector, vectorLength);
+  
+  double hXY = calcJointRenyiEntropy(alpha, dataVector, targetVector, vectorLength);
   
   double answer = hX + hY - hXY;
   
   return answer;
-}/*calculateRenyiMIJoint(double, double*, double*, int)*/
+}/*calcRenyiMIJoint(double, int*, int*, int)*/
 
+double discAndCalcRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength)
+{
+  double mi;
+  int *dataNormVector = (int *) checkedCalloc(vectorLength, sizeof(int));
+  int *targetNormVector = (int *) checkedCalloc(vectorLength, sizeof(int));
+
+  normaliseArray(dataVector,dataNormVector,vectorLength);
+  normaliseArray(targetVector,targetNormVector,vectorLength);
+  
+  mi = calcRenyiMIJoint(alpha,dataNormVector,targetNormVector,vectorLength);
+
+  FREE_FUNC(dataNormVector);
+  FREE_FUNC(targetNormVector);
+  dataNormVector = NULL;
+  targetNormVector = NULL;
+
+  return mi;
+}/*discAndCalcRenyiMIJoint(double, double*, double*, int)*/

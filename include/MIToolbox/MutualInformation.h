@@ -19,28 +19,37 @@
 #ifndef __MutualInformation_H
 #define __MutualInformation_H
 
+#include "MIToolbox/CalculateProbability.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 /*******************************************************************************
-** calculateMutualInformation returns the log base 2 mutual information between
+** calculateMutualInformation returns the log base LOG_BASE mutual information between
 ** dataVector and targetVector, I(X;Y)
 **
 ** length(dataVector) == length(targetVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calculateMutualInformation(double *dataVector, double *targetVector, int vectorLength);
+double calcMutualInformation(int *dataVector, int *targetVector, int vectorLength);
+double discAndCalcMutualInformation(double *dataVector, double *targetVector, int vectorLength);
 
 /*******************************************************************************
-** calculateConditionalMutualInformation returns the log base 2 
+** calculateConditionalMutualInformation returns the log base LOG_BASE 
 ** mutual information between dataVector and targetVector, conditioned on 
 ** conditionVector, I(X;Y|Z)
 **
 ** length(dataVector) == length(targetVector) == length(condtionVector) == vectorLength 
 ** otherwise it will error with a segmentation fault
 *******************************************************************************/
-double calculateConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength);
+double calcConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, int vectorLength);
+double discAndCalcConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength);
+
+/*******************************************************************************
+** Inner functions which operate on state structs.
+*******************************************************************************/
+double mi(JointProbabilityState state);
 
 #ifdef __cplusplus
 }

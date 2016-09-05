@@ -20,33 +20,38 @@
 #ifndef __Renyi_Entropy_H
 #define __Renyi_Entropy_H
 
+#include "MIToolbox/CalculateProbability.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 /*******************************************************************************
-** calculateRenyiEntropy returns the Renyi entropy in log base 2 of dataVector
+** calculateRenyiEntropy returns the Renyi entropy in log base LOG_BASE of dataVector
 ** H_{\alpha}(X), for \alpha != 1
 **
 ** length(dataVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calculateRenyiEntropy(double alpha, double *dataVector, int vectorLength);
+double calcRenyiEntropy(double alpha, int *dataVector, int vectorLength);
+double discAndCalcRenyiEntropy(double alpha, double *dataVector, int vectorLength);
 
 /*******************************************************************************
-** calculateJointRenyiEntropy returns the Renyi entropy in log base 2 of the 
+** calculateJointRenyiEntropy returns the Renyi entropy in log base LOG_BASE of the 
 ** joint variable of firstVector and secondVector H_{\alpha}(XY), 
 ** for \alpha != 1
 **
 ** length(firstVector) == length(secondVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calculateJointRenyiEntropy(double alpha, double *firstVector, double *secondVector, int vectorLength);
+double calcJointRenyiEntropy(double alpha, int *firstVector, int *secondVector, int vectorLength);
+double discAndCalcJointRenyiEntropy(double alpha, double *firstVector, double *secondVector, int vectorLength);
 
-/*  This function does not return a valid conditonal entropy as it has no 
-**  meaning in Renyi's extension of entropy
-double calculateConditionalRenyiEntropy(double alpha, double *dataVector, double *conditionVector, int vectorLength);
-*/
+/*******************************************************************************
+** Inner functions which operate on state structs.
+*******************************************************************************/
+double renyiEntropy(ProbabilityState state, double alpha);
+double jointRenyiEntropy(JointProbabilityState state, double alpha);
 
 #ifdef __cplusplus
 }

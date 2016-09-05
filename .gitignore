@@ -23,3 +23,6 @@
 
 # Editor backups
 *~
+
+# Build folder
+/build/

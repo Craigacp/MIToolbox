@@ -23,15 +23,13 @@
 #include "MIToolbox/Entropy.h"
 #include "MIToolbox/MutualInformation.h"
 
-double calculateMutualInformation(double *dataVector, double *targetVector, int vectorLength)
-{
+double mi(JointProbabilityState state) {
   double mutualInformation = 0.0;
   int firstIndex,secondIndex;
   int i;
-  JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
     
   /*
-  ** I(X;Y) = sum sum p(xy) * log (p(xy)/p(x)p(y))
+  ** I(X;Y) = \sum_x \sum_y p(x,y) * \log (p(x,y)/p(x)p(y))
   */
   for (i = 0; i < state.numJointStates; i++)
   {
@@ -47,30 +45,45 @@ double calculateMutualInformation(double *dataVector, double *targetVector, int 
     }
   }
   
-  mutualInformation /= log(2.0);
+  mutualInformation /= log(LOG_BASE);
+ 
+  return mutualInformation;
+}/*mi(JointProbabilityState)*/
+
+double calcMutualInformation(int *dataVector, int *targetVector, int vectorLength)
+{
+  JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
+    
+  double mutualInformation = mi(state);
   
-  FREE_FUNC(state.firstProbabilityVector);
-  state.firstProbabilityVector = NULL;
-  FREE_FUNC(state.secondProbabilityVector);
-  state.secondProbabilityVector = NULL;
-  FREE_FUNC(state.jointProbabilityVector);
-  state.jointProbabilityVector = NULL;
+  freeJointProbabilityState(state);
   
   return mutualInformation;
-}/*calculateMutualInformation(double *,double *,int)*/
+}/*calculateMutualInformation(int *,int *,int)*/
 
-double calculateConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength)
+double discAndCalcMutualInformation(double *dataVector, double *targetVector, int vectorLength)
+{
+  JointProbabilityState state = discAndCalcJointProbability(dataVector,targetVector,vectorLength);
+    
+  double mutualInformation = mi(state);
+  
+  freeJointProbabilityState(state);
+  
+  return mutualInformation;
+}/*discAndCalcMutualInformation(double *,double *,int)*/
+
+double calcConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, int vectorLength)
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  double *mergedVector = (double *) checkedCalloc(vectorLength,sizeof(double));
+  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   
   /* I(X;Y|Z) = H(X|Z) - H(X|YZ) */
   /* double calculateConditionalEntropy(double *dataVector, double *conditionVector, int vectorLength); */
-  firstCondition = calculateConditionalEntropy(dataVector,conditionVector,vectorLength);
-  secondCondition = calculateConditionalEntropy(dataVector,mergedVector,vectorLength);
+  firstCondition = calcConditionalEntropy(dataVector,conditionVector,vectorLength);
+  secondCondition = calcConditionalEntropy(dataVector,mergedVector,vectorLength);
   
   mutualInformation = firstCondition - secondCondition;
   
@@ -80,3 +93,35 @@ double calculateConditionalMutualInformation(double *dataVector, double *targetV
   return mutualInformation;
 }/*calculateConditionalMutualInformation(double *,double *,double *,int)*/
 
+double discAndCalcConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength)
+{
+  double mutualInformation = 0.0;
+  double firstCondition, secondCondition;
+  int *dataNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  int *targetNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  int *conditionNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  
+  normaliseArray(dataVector,dataNormVector,vectorLength);
+  normaliseArray(targetVector,targetNormVector,vectorLength);
+  normaliseArray(conditionVector,conditionNormVector,vectorLength);
+  mergeArrays(targetNormVector,conditionNormVector,mergedVector,vectorLength);
+  
+  /* I(X;Y|Z) = H(X|Z) - H(X|YZ) */
+  /* double calculateConditionalEntropy(double *dataVector, double *conditionVector, int vectorLength); */
+  firstCondition = calcConditionalEntropy(dataNormVector,conditionNormVector,vectorLength);
+  secondCondition = calcConditionalEntropy(dataNormVector,mergedVector,vectorLength);
+  
+  mutualInformation = firstCondition - secondCondition;
+  
+  FREE_FUNC(dataNormVector);
+  FREE_FUNC(targetNormVector);
+  FREE_FUNC(conditionNormVector);
+  FREE_FUNC(mergedVector);
+  dataNormVector = NULL;
+  targetNormVector = NULL;
+  conditionNormVector = NULL;
+  mergedVector = NULL;
+  
+  return mutualInformation;
+}/*calculateConditionalMutualInformation(double *,double *,double *,int)*/

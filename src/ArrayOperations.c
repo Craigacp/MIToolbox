@@ -47,7 +47,7 @@ void printDoubleVector(double *vector, int vectorLength)
   for (i = 0; i < vectorLength; i++)
   {
     if (vector[i] > 0)
-      printf("Val at i=%d, is %f\n",i,vector[i]);
+      printf("Value at i=%d, is %f\n",i,vector[i]);
   }/*for number of items in vector*/
 }/*printDoubleVector(double*,int)*/
 
@@ -56,9 +56,20 @@ void printIntVector(int *vector, int vectorLength)
   int i;
   for (i = 0; i < vectorLength; i++)
   {
-    printf("Val at i=%d, is %d\n",i,vector[i]);
+    printf("Value at i=%d, is %d\n",i,vector[i]);
   }/*for number of items in vector*/
 }/*printIntVector(int*,int)*/
+
+int maxState(int *vector, int vectorLength) {
+    int i, max;
+    max = 0;
+    for (i = 0; i < vectorLength; i++) {
+	if (vector[i] > max) {
+	    max = vector[i];
+	}
+    }
+    return max + 1;
+}
 
 int numberOfUniqueValues(double *featureVector, int vectorLength)
 {
@@ -151,32 +162,17 @@ int normaliseArray(double *inputVector, int *outputVector, int vectorLength)
 ** the length of the vectors must be the same and equal to vectorLength
 ** outputVector must be malloc'd before calling this function
 *******************************************************************************/
-int mergeArrays(double *firstVector, double *secondVector, double *outputVector, int vectorLength)
+int mergeArrays(int *firstVector, int *secondVector, int *outputVector, int vectorLength)
 {
-  int *firstNormalisedVector;
-  int *secondNormalisedVector;
-  int firstNumStates;
-  int secondNumStates;
-  int i;
-  int *stateMap;
-  int stateCount;
-  int curIndex;
+  int firstNumStates = maxState(firstVector,vectorLength);
+  int secondNumStates = maxState(secondVector,vectorLength);
+  int *stateMap = (int *) checkedCalloc(firstNumStates*secondNumStates,sizeof(int));
+  int stateCount = 1;
+  int i, curIndex;
   
-  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-
-  firstNumStates = normaliseArray(firstVector,firstNormalisedVector,vectorLength);
-  secondNumStates = normaliseArray(secondVector,secondNormalisedVector,vectorLength);
-  
-  /*
-  ** printVector(firstNormalisedVector,vectorLength);
-  ** printVector(secondNormalisedVector,vectorLength);
-  */
-  stateMap = (int *) checkedCalloc(firstNumStates*secondNumStates,sizeof(int));
-  stateCount = 1;
   for (i = 0; i < vectorLength; i++)
   {
-    curIndex = firstNormalisedVector[i] + (secondNormalisedVector[i] * firstNumStates);
+    curIndex = firstVector[i] + (secondVector[i] * firstNumStates);
     if (stateMap[curIndex] == 0)
     {
       stateMap[curIndex] = stateCount;
@@ -185,19 +181,69 @@ int mergeArrays(double *firstVector, double *secondVector, double *outputVector,
     outputVector[i] = stateMap[curIndex];
   }
     
+  FREE_FUNC(stateMap);
+  stateMap = NULL;
+  
+  return stateCount;
+}/*mergeArrays(double *,double *,int *, int)*/
+
+/*******************************************************************************
+** discAndMergeArrays takes in two arrays, discretises them and writes the joint
+** state of those arrays to the output vector, returning the number of joint 
+** states.
+**
+** the length of the vectors must be the same and equal to vectorLength
+** outputVector must be malloc'd before calling this function
+*******************************************************************************/
+int discAndMergeArrays(double *firstVector, double *secondVector, int *outputVector, int vectorLength)
+{
+  int *firstNormalisedVector;
+  int *secondNormalisedVector;
+  int stateCount;
+  
+  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+
+  normaliseArray(firstVector,firstNormalisedVector,vectorLength);
+  normaliseArray(secondVector,secondNormalisedVector,vectorLength);
+  
+  stateCount = mergeArrays(firstNormalisedVector,secondNormalisedVector,outputVector,vectorLength);
+    
   FREE_FUNC(firstNormalisedVector);
   FREE_FUNC(secondNormalisedVector);
-  FREE_FUNC(stateMap);
   
   firstNormalisedVector = NULL;
   secondNormalisedVector = NULL;
-  stateMap = NULL;
   
-  /*printVector(outputVector,vectorLength);*/
   return stateCount;
-}/*mergeArrays(double *,double *,double *, int, bool)*/
+}/*discAndMergeArrays(double *,double *,int *, int)*/
 
-int mergeArraysArities(double *firstVector, int numFirstStates, double *secondVector, int numSecondStates, double *outputVector, int vectorLength)
+int mergeArraysArities(int *firstVector, int numFirstStates, int *secondVector, int numSecondStates, int *outputVector, int vectorLength)
+{
+  int i;
+  int totalStates;
+  int firstStateCheck, secondStateCheck;
+  
+  firstStateCheck = maxState(firstVector,vectorLength);
+  secondStateCheck = maxState(secondVector,vectorLength);
+  
+  if ((firstStateCheck <= numFirstStates) && (secondStateCheck <= numSecondStates))
+  {
+    for (i = 0; i < vectorLength; i++)
+    {
+      outputVector[i] = firstVector[i] + (secondVector[i] * numFirstStates) + 1;
+    }
+    totalStates = numFirstStates * numSecondStates;
+  }
+  else
+  {
+    totalStates = -1;
+  }
+  
+  return totalStates;
+}/*mergeArraysArities(int *,int,int *,int,int *,int)*/
+
+int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *secondVector, int numSecondStates, int *outputVector, int vectorLength)
 {
   int *firstNormalisedVector;
   int *secondNormalisedVector;
@@ -233,65 +279,59 @@ int mergeArraysArities(double *firstVector, int numFirstStates, double *secondVe
   return totalStates;
 }/*mergeArraysArities(double *,int,double *,int,double *,int)*/
 
-int mergeMultipleArrays(double *inputMatrix, double *outputVector, int matrixWidth, int vectorLength)
-{
-  int i = 0;
-  int currentIndex;
-  int currentNumStates;
-  int *normalisedVector;
-  
-  if (matrixWidth > 1)
-  {
-  	currentNumStates = mergeArrays(inputMatrix, (inputMatrix + vectorLength), outputVector,vectorLength);
-  	for (i = 2; i < matrixWidth; i++)
-  	{
-    	currentIndex = i * vectorLength;
-    	currentNumStates = mergeArrays(outputVector,(inputMatrix + currentIndex),outputVector,vectorLength);
-  	}
-  }
-  else
-  {
-    normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-    currentNumStates = normaliseArray(inputMatrix,normalisedVector,vectorLength);
-  	for (i = 0; i < vectorLength; i++)
-  	{
-  		outputVector[i] = inputMatrix[i];
-  	}
-  }
-  
-  return currentNumStates;
-}/*mergeMultipleArrays(double *, double *, int, int, bool)*/
+int mergeMultipleArrays(double *inputMatrix, int *outputVector, int matrixWidth, int vectorLength) {
+    int i = 0;
+    int currentIndex;
+    int currentNumStates;
+    int *normalisedVector = (int *) checkedCalloc(vectorLength, sizeof(int));
 
+    if (matrixWidth > 1) {
+        currentNumStates = discAndMergeArrays(inputMatrix, (inputMatrix + vectorLength), outputVector, vectorLength);
+        for (i = 2; i < matrixWidth; i++) {
+            currentIndex = i * vectorLength;
+	    normaliseArray(inputMatrix+currentIndex, normalisedVector, vectorLength);
+            currentNumStates = mergeArrays(outputVector, normalisedVector, outputVector, vectorLength);
+        }
+    } else {
+        currentNumStates = normaliseArray(inputMatrix, normalisedVector, vectorLength);
+        for (i = 0; i < vectorLength; i++) {
+            outputVector[i] = normalisedVector[i];
+        }
+    }
+    
+    FREE_FUNC(normalisedVector);
+    normalisedVector = NULL;
 
-int mergeMultipleArraysArities(double *inputMatrix, double *outputVector, int matrixWidth, int *arities, int vectorLength)
-{
-  int i = 0;
-  int currentIndex;
-  int currentNumStates;
-  int *normalisedVector;
-  
-  if (matrixWidth > 1)
-  {
-  	currentNumStates = mergeArraysArities(inputMatrix, arities[0], (inputMatrix + vectorLength), arities[1], outputVector,vectorLength);
-  	for (i = 2; i < matrixWidth; i++)
-  	{
-    	currentIndex = i * vectorLength;
-    	currentNumStates = mergeArraysArities(outputVector,currentNumStates,(inputMatrix + currentIndex),arities[i],outputVector,vectorLength);
-    	if (currentNumStates == -1)
-    	  break;
-  	}
-  }
-  else
-  { 
-    normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-    currentNumStates = normaliseArray(inputMatrix,normalisedVector,vectorLength);
-  	for (i = 0; i < vectorLength; i++)
-  	{
-  		outputVector[i] = inputMatrix[i];
-  	}
-  }
-  
-  return currentNumStates;
-}/*mergeMultipleArraysArities(double *, double *, int, int, bool)*/
+    return currentNumStates;
+}/*mergeMultipleArrays(double *, double *, int, int)*/
+
+int mergeMultipleArraysArities(double *inputMatrix, int *outputVector, int matrixWidth, int *arities, int vectorLength) {
+    int i = 0;
+    int currentIndex;
+    int currentNumStates;
+    int *normalisedVector = (int *) checkedCalloc(vectorLength, sizeof(int));
+
+    if (matrixWidth > 1) {
+        currentNumStates = discAndMergeArraysArities(inputMatrix, arities[0], (inputMatrix + vectorLength), arities[1], outputVector, vectorLength);
+        for (i = 2; i < matrixWidth; i++) {
+            currentIndex = i * vectorLength;
+	    normaliseArray(inputMatrix+currentIndex, normalisedVector, vectorLength);
+            currentNumStates = mergeArraysArities(outputVector, currentNumStates, normalisedVector, arities[i], outputVector, vectorLength);
+            if (currentNumStates == -1) {
+                break;
+	    }
+        }
+    } else {
+        currentNumStates = normaliseArray(inputMatrix, normalisedVector, vectorLength);
+        for (i = 0; i < vectorLength; i++) {
+            outputVector[i] = normalisedVector[i];
+        }
+    }
+    
+    FREE_FUNC(normalisedVector);
+    normalisedVector = NULL;
+
+    return currentNumStates;
+}/*mergeMultipleArraysArities(double *, double *, int, int)*/
 
 

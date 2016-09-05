@@ -20,26 +20,35 @@
 #ifndef __WeightedMutualInformation_H
 #define __WeightedMutualInformation_H
 
+#include "MIToolbox/CalculateProbability.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 /*******************************************************************************
-** calculateWeightedMutualInformation returns the log base 2 mutual information 
+** calculateWeightedMutualInformation returns the LOG_BASE mutual information 
 ** between dataVector and targetVector, I_w(X;Y), weighted by weightVector
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calculateWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength);
+double calcWeightedMutualInformation(int *dataVector, int *targetVector, double *weightVector, int vectorLength);
+double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
-** calculateWeightedConditionalMutualInformation returns the log base 2 
+** calculateWeightedConditionalMutualInformation returns the LOG_BASE 
 ** mutual information between dataVector and targetVector, conditioned on 
 ** conditionVector, I(X;Y|Z), weighted by weightVector
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calculateWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength);
+double calcWeightedConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, double *weightVector, int vectorLength);
+double discAndCalcWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength);
+
+/*******************************************************************************
+** Inner functions which operate on state structs.
+*******************************************************************************/
+double wmi(WeightedJointProbState state);
 
 #ifdef __cplusplus
 }
