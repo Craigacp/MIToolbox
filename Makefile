@@ -40,9 +40,9 @@ intel:
 	$(MAKE) libMIToolbox.so "CC = icc" "CFLAGS = -O2 -fPIC -xHost"
 
 clean:
-	-rm -r build 2> /dev/null || true
-	-rm matlab/*.o matlab/*.mex* 2> /dev/null || true
-	-rm libMIToolbox.so 2> /dev/null || true
+	-rm -fr build
+	-rm -f matlab/*.o matlab/*.mex*
+	-rm -f libMIToolbox.so
 
 install: libMIToolbox.so
 	@echo "Installing libMIToolbox.so to $(PREFIX)/lib"

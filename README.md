@@ -71,7 +71,7 @@ ans =
 ======
 
 To compile the library for use in MATLAB/OCTAVE, execute CompileMIToolbox.m
-from within MATLAB, or run 'make matlab' from a terminal.
+from within MATLAB in the "matlab" folder.
 
 To compile the library for use with C programs run 'make x86' for a 32-bit
 library, or 'make x64' for a 64-bit library. Then run 'sudo make install' to
