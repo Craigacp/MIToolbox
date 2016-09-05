@@ -36,25 +36,15 @@ x86:
 x64:
 	$(MAKE) libMIToolbox.so "CFLAGS = -O3 -fPIC -m64"
 	
-matlab:
-	mex MIToolboxMex.c MutualInformation.c Entropy.c CalculateProbability.c ArrayOperations.c
-	mex RenyiMIToolboxMex.c RenyiMutualInformation.c RenyiEntropy.c CalculateProbability.c ArrayOperations.c
-	mex WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbability.c ArrayOperations.c
-
-matlab-debug:
-	mex -g MIToolboxMex.c MutualInformation.c Entropy.c CalculateProbability.c ArrayOperations.c
-	mex -g RenyiMIToolboxMex.c RenyiMutualInformation.c RenyiEntropy.c CalculateProbability.c ArrayOperations.c
-	mex -g WeightedMIToolboxMex.c WeightedMutualInformation.c WeightedEntropy.c CalculateProbability.c ArrayOperations.c
-
 intel:
 	$(MAKE) libMIToolbox.so "CC = icc" "CFLAGS = -O2 -fPIC -xHost"
 
 clean:
-	rm -r build
-	rm libMIToolbox.so
+	-rm -r build 2> /dev/null || true
+	-rm matlab/*.o matlab/*.mex* 2> /dev/null || true
+	-rm libMIToolbox.so 2> /dev/null || true
 
-install:
-	$(MAKE)
+install: libMIToolbox.so
 	@echo "Installing libMIToolbox.so to $(PREFIX)/lib"
 	@cp -v libMIToolbox.so $(PREFIX)/lib
 	@mkdir -p $(PREFIX)/include
