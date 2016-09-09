@@ -1,6 +1,6 @@
 MIToolbox
 =========
-v2.1.1 for C/C++ and MATLAB/Octave
+v3.0.0 for C/C++ and MATLAB/Octave
 
 MIToolbox contains a set of functions to calculate information theoretic
 quantities from data, such as the entropy and mutual information.  The toolbox
@@ -30,6 +30,15 @@ Functions contained:
  - Weighted Conditional Mutual Information
 
 Note: all functions are calculated in log base 2, so return units of "bits".
+
+MIToolbox works on discrete inputs, and all continuous values **must** be
+discretised before use with MIToolbox. Real-valued inputs will be discretised
+with x = floor(x) to ensure compatibility. MIToolbox produces unreliable
+results when used with continuous inputs, runs slowly and uses much more memory
+than usual. The discrete inputs should have small cardinality, MIToolbox will
+treat values {1,10,100} the same way it treats {1,2,3} and the latter will be
+both faster and use less memory. This limitation is due to the difficulties in
+estimating information theoretic functions of continuous variables.
 
 ======
 
@@ -80,6 +89,7 @@ install MIToolbox into /usr/local/lib & /usr/local/include.
 All code is licensed under the 3-clause BSD license.
 
 Update History
+ - xx/09/2016 - v3.0.0 - Refactored internals to expose integer information theoretic calculations.
  - 10/01/2016 - v2.1.2 - Relicense from LGPL to BSD. Added checks to ensure input MATLAB types are doubles.
  - 02/02/2015 - v2.1.1 - Fixed up the Makefile so it installs the headers too.
  - 22/02/2014 - v2.1  - Fixed a couple of bugs related to memory handling.
