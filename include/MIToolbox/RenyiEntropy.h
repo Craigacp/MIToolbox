@@ -20,6 +20,7 @@
 #ifndef __Renyi_Entropy_H
 #define __Renyi_Entropy_H
 
+#include "MIToolbox/MIToolbox.h"
 #include "MIToolbox/CalculateProbability.h"
 
 #ifdef __cplusplus
@@ -33,7 +34,7 @@ extern "C" {
 ** length(dataVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calcRenyiEntropy(double alpha, int *dataVector, int vectorLength);
+double calcRenyiEntropy(double alpha, uint *dataVector, int vectorLength);
 double discAndCalcRenyiEntropy(double alpha, double *dataVector, int vectorLength);
 
 /*******************************************************************************
@@ -44,7 +45,7 @@ double discAndCalcRenyiEntropy(double alpha, double *dataVector, int vectorLengt
 ** length(firstVector) == length(secondVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calcJointRenyiEntropy(double alpha, int *firstVector, int *secondVector, int vectorLength);
+double calcJointRenyiEntropy(double alpha, uint *firstVector, uint *secondVector, int vectorLength);
 double discAndCalcJointRenyiEntropy(double alpha, double *firstVector, double *secondVector, int vectorLength);
 
 /*******************************************************************************

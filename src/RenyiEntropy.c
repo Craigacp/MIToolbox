@@ -44,7 +44,7 @@ double renyiEntropy(ProbabilityState state, double alpha) {
   return entropy;
 }
 
-double calcRenyiEntropy(double alpha, int *dataVector, int vectorLength)
+double calcRenyiEntropy(double alpha, uint *dataVector, int vectorLength)
 {
   ProbabilityState state = calculateProbability(dataVector,vectorLength);
   double h = renyiEntropy(state,alpha);
@@ -52,7 +52,7 @@ double calcRenyiEntropy(double alpha, int *dataVector, int vectorLength)
   freeProbabilityState(state);
   
   return h;
-}/*calcRenyiEntropy(double,int*,int)*/
+}/*calcRenyiEntropy(double,uint*,int)*/
 
 double discAndCalcRenyiEntropy(double alpha, double *dataVector, int vectorLength)
 {
@@ -86,7 +86,7 @@ double jointRenyiEntropy(JointProbabilityState state, double alpha) {
   return jointEntropy;
 }
 
-double calcJointRenyiEntropy(double alpha, int *firstVector, int *secondVector, int vectorLength)
+double calcJointRenyiEntropy(double alpha, uint *firstVector, uint *secondVector, int vectorLength)
 {
   JointProbabilityState state = calculateJointProbability(firstVector,secondVector,vectorLength);
   double h = jointRenyiEntropy(state,alpha);
@@ -94,7 +94,7 @@ double calcJointRenyiEntropy(double alpha, int *firstVector, int *secondVector, 
   freeJointProbabilityState(state);
   
   return h;
-}/*calcJointRenyiEntropy(double,int*,int*,int)*/
+}/*calcJointRenyiEntropy(double,uint*,uint*,int)*/
 
 double discAndCalcJointRenyiEntropy(double alpha, double *firstVector, double *secondVector, int vectorLength)
 {
@@ -105,3 +105,4 @@ double discAndCalcJointRenyiEntropy(double alpha, double *firstVector, double *s
   
   return h;
 }/*discAndCalcJointRenyiEntropy(double,double*,double*,int)*/
+

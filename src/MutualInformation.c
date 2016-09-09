@@ -50,7 +50,7 @@ double mi(JointProbabilityState state) {
   return mutualInformation;
 }/*mi(JointProbabilityState)*/
 
-double calcMutualInformation(int *dataVector, int *targetVector, int vectorLength)
+double calcMutualInformation(uint *dataVector, uint *targetVector, int vectorLength)
 {
   JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
     
@@ -59,7 +59,7 @@ double calcMutualInformation(int *dataVector, int *targetVector, int vectorLengt
   freeJointProbabilityState(state);
   
   return mutualInformation;
-}/*calculateMutualInformation(int *,int *,int)*/
+}/*calculateMutualInformation(uint *,uint *,int)*/
 
 double discAndCalcMutualInformation(double *dataVector, double *targetVector, int vectorLength)
 {
@@ -72,11 +72,11 @@ double discAndCalcMutualInformation(double *dataVector, double *targetVector, in
   return mutualInformation;
 }/*discAndCalcMutualInformation(double *,double *,int)*/
 
-double calcConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, int vectorLength)
+double calcConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, int vectorLength)
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  uint *mergedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   
@@ -97,10 +97,10 @@ double discAndCalcConditionalMutualInformation(double *dataVector, double *targe
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  int *dataNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *targetNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *conditionNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  uint *dataNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *targetNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *conditionNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *mergedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   
   normaliseArray(dataVector,dataNormVector,vectorLength);
   normaliseArray(targetVector,targetNormVector,vectorLength);
@@ -125,3 +125,4 @@ double discAndCalcConditionalMutualInformation(double *dataVector, double *targe
   
   return mutualInformation;
 }/*calculateConditionalMutualInformation(double *,double *,double *,int)*/
+

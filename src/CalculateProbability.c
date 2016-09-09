@@ -20,7 +20,7 @@
 #include "MIToolbox/ArrayOperations.h"
 #include "MIToolbox/CalculateProbability.h"
 
-JointProbabilityState calculateJointProbability(int *firstVector, int *secondVector, int vectorLength)
+JointProbabilityState calculateJointProbability(uint *firstVector, uint *secondVector, int vectorLength)
 {
   int *firstStateCounts;
   int *secondStateCounts;
@@ -102,9 +102,9 @@ JointProbabilityState calculateJointProbability(int *firstVector, int *secondVec
 
 JointProbabilityState discAndCalcJointProbability(double *firstVector, double *secondVector, int vectorLength)
 {
+  uint *firstNormalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *secondNormalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   JointProbabilityState state;
-  int *firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   normaliseArray(firstVector,firstNormalisedVector,vectorLength);
   normaliseArray(secondVector,secondNormalisedVector,vectorLength);
@@ -120,7 +120,7 @@ JointProbabilityState discAndCalcJointProbability(double *firstVector, double *s
   return state;
 }/*calculateJointProbability(double *,double *, int)*/
 
-WeightedJointProbState calculateWeightedJointProbability(int *firstVector, int *secondVector, double *weightVector, int vectorLength) {
+WeightedJointProbState calculateWeightedJointProbability(uint *firstVector, uint *secondVector, double *weightVector, int vectorLength) {
   int *firstStateCounts;
   int *secondStateCounts;
   int *jointStateCounts;
@@ -229,12 +229,9 @@ WeightedJointProbState calculateWeightedJointProbability(int *firstVector, int *
 
 WeightedJointProbState discAndCalcWeightedJointProbability(double *firstVector, double *secondVector, double *weightVector, int vectorLength)
 {
-  int *firstNormalisedVector;
-  int *secondNormalisedVector;
+  uint *firstNormalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *secondNormalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   WeightedJointProbState state;
-
-  firstNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  secondNormalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
   
   normaliseArray(firstVector,firstNormalisedVector,vectorLength);
   normaliseArray(secondVector,secondNormalisedVector,vectorLength);
@@ -249,7 +246,7 @@ WeightedJointProbState discAndCalcWeightedJointProbability(double *firstVector, 
   return state;
 }/*calculateJointProbability(double *,double *, int)*/
 
-ProbabilityState calculateProbability(int* dataVector, int vectorLength) {
+ProbabilityState calculateProbability(uint* dataVector, int vectorLength) {
   int numStates;
   int *stateCounts;
   double *stateProbs;
@@ -284,7 +281,7 @@ ProbabilityState calculateProbability(int* dataVector, int vectorLength) {
 
 ProbabilityState discAndCalcProbability(double *dataVector, int vectorLength)
 {
-  int *normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  uint *normalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   
   normaliseArray(dataVector,normalisedVector,vectorLength);
   
@@ -297,7 +294,7 @@ ProbabilityState discAndCalcProbability(double *dataVector, int vectorLength)
 }/*calculateProbability(double *,int)*/
 
 
-WeightedProbState calculateWeightedProbability(int *dataVector, double *weightVector, int vectorLength) {
+WeightedProbState calculateWeightedProbability(uint *dataVector, double *weightVector, int vectorLength) {
   int *stateCounts;
   double *stateProbs;
   double *stateWeights;
@@ -336,8 +333,7 @@ WeightedProbState calculateWeightedProbability(int *dataVector, double *weightVe
 WeightedProbState discAndCalcWeightedProbability(double *dataVector, double *weightVector, int vectorLength)
 {
   WeightedProbState state;
-  int *normalisedVector;
-  normalisedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  uint *normalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   normaliseArray(dataVector,normalisedVector,vectorLength);
   
   state = calculateWeightedProbability(normalisedVector,weightVector,vectorLength);

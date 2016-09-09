@@ -18,6 +18,7 @@
 #ifndef __WeightedEntropy_H
 #define __WeightedEntropy_H
 
+#include "MIToolbox/MIToolbox.h"
 #include "MIToolbox/CalculateProbability.h"
 
 #ifdef __cplusplus
@@ -30,7 +31,7 @@ extern "C" {
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calcWeightedEntropy(int *dataVector, double *weightVector, int vectorLength);
+double calcWeightedEntropy(uint *dataVector, double *weightVector, int vectorLength);
 double discAndCalcWeightedEntropy(double *dataVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
@@ -39,7 +40,7 @@ double discAndCalcWeightedEntropy(double *dataVector, double *weightVector, int 
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calcWeightedJointEntropy(int *firstVector, int *secondVector, double *weightVector, int vectorLength);
+double calcWeightedJointEntropy(uint *firstVector, uint *secondVector, double *weightVector, int vectorLength);
 double discAndCalcWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
@@ -48,7 +49,7 @@ double discAndCalcWeightedJointEntropy(double *firstVector, double *secondVector
 **
 ** length(vectors) == vectorLength otherwise it will segmentation fault
 *******************************************************************************/
-double calcWeightedConditionalEntropy(int *dataVector, int *conditionVector, double *weightVector, int vectorLength);
+double calcWeightedConditionalEntropy(uint *dataVector, uint *conditionVector, double *weightVector, int vectorLength);
 double discAndCalcWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************

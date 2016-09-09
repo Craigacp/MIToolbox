@@ -47,14 +47,14 @@ double discAndCalcEntropy(double* dataVector, int vectorLength) {
     return h;
 }/*discAndCalcEntropy(double* ,int)*/
 
-double calcEntropy(int* dataVector, int vectorLength) {
+double calcEntropy(uint* dataVector, int vectorLength) {
     ProbabilityState state = calculateProbability(dataVector, vectorLength);
     double h = entropy(state);
 
     freeProbabilityState(state);
     
     return h;
-}/*calcEntropy(int* ,int)*/
+}/*calcEntropy(uint* ,int)*/
 
 double jointEntropy(JointProbabilityState state) {
     double jointEntropy = 0.0;
@@ -83,14 +83,14 @@ double discAndCalcJointEntropy(double *firstVector, double *secondVector, int ve
     return h;
 }/*discAndCalcJointEntropy(double *, double *, int)*/
 
-double calcJointEntropy(int *firstVector, int *secondVector, int vectorLength) {
+double calcJointEntropy(uint *firstVector, uint *secondVector, int vectorLength) {
     JointProbabilityState state = calculateJointProbability(firstVector, secondVector, vectorLength);
     double h = jointEntropy(state);
 
     freeJointProbabilityState(state);
 
     return h;
-}/*calcJointEntropy(int *, int *, int)*/
+}/*calcJointEntropy(uint *, uint *, int)*/
 
 double condEntropy(JointProbabilityState state) {
     double condEntropy = 0.0;
@@ -123,12 +123,12 @@ double discAndCalcConditionalEntropy(double *dataVector, double *conditionVector
     return h;
 }/*discAndCalcConditionalEntropy(double *, double *, int)*/
 
-double calcConditionalEntropy(int *dataVector, int *conditionVector, int vectorLength) {
+double calcConditionalEntropy(uint *dataVector, uint *conditionVector, int vectorLength) {
     JointProbabilityState state = calculateJointProbability(dataVector, conditionVector, vectorLength);
     double h = condEntropy(state);
 
     freeJointProbabilityState(state);
 
     return h;
-}/*calcConditionalEntropy(double *, double *, int)*/
+}/*calcConditionalEntropy(uint *, uint *, int)*/
 

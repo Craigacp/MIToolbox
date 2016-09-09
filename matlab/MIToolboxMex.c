@@ -35,8 +35,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   int  numArities, errorTest;
   double *dataVector, *condVector, *targetVector, *firstVector, *secondVector, *output, *numStates;
   double *matrix, *arities;
-  int *mergedVector;
-  int *outputIntVector, *intArities;
+  uint *mergedVector;
+  uint *outputIntVector, *intArities;
   
   double *jointOutput, *numJointStates, *firstOutput, *numFirstStates, *secondOutput, *numSecondStates;
   
@@ -186,7 +186,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         if ((numberOfFeatures > 0) && (numberOfSamples > 0))
         { 
           matrix = (double *) mxGetPr(prhs[1]);
-          mergedVector = (int *) mxCalloc(numberOfSamples,sizeof(int));
+          mergedVector = (uint *) mxCalloc(numberOfSamples,sizeof(uint));
             
           plhs[0] = mxCreateDoubleMatrix(numberOfSamples,1,mxREAL);
           output = (double *)mxGetPr(plhs[0]);
@@ -208,13 +208,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         { 
           
           matrix = (double *) mxGetPr(prhs[1]);
-          mergedVector = (int *) mxCalloc(numberOfSamples,sizeof(int));
+          mergedVector = (uint *) mxCalloc(numberOfSamples,sizeof(uint));
           
           arities = (double *) mxGetPr(prhs[2]);
-          intArities = (int *) mxCalloc(numberOfFeatures,sizeof(int));
+          intArities = (uint *) mxCalloc(numberOfFeatures,sizeof(uint));
           for (i = 0; i < numArities; i++)
           {
-            intArities[i] = (int) floor(arities[i]);
+            intArities[i] = (uint) floor(arities[i]);
           }
           
           /*int mergeMultipleArrays(double *inputMatrix, double *outputVector, int matrixWidth, int *arities, int vectorLength);*/
@@ -464,7 +464,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       numberOfSamples = mxGetM(prhs[1]);
       dataVector = (double *) mxGetPr(prhs[1]);
       
-      outputIntVector = (int *) mxCalloc(numberOfSamples,sizeof(int));
+      outputIntVector = (uint *) mxCalloc(numberOfSamples,sizeof(uint));
 
       plhs[0] = mxCreateDoubleMatrix(numberOfSamples,1,mxREAL);
       plhs[1] = mxCreateDoubleMatrix(1,1,mxREAL);
@@ -493,3 +493,4 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   
   return;
 }/*mexFunction()*/
+

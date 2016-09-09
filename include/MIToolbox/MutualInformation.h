@@ -19,6 +19,7 @@
 #ifndef __MutualInformation_H
 #define __MutualInformation_H
 
+#include "MIToolbox/MIToolbox.h"
 #include "MIToolbox/CalculateProbability.h"
 
 #ifdef __cplusplus
@@ -32,7 +33,7 @@ extern "C" {
 ** length(dataVector) == length(targetVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calcMutualInformation(int *dataVector, int *targetVector, int vectorLength);
+double calcMutualInformation(uint *dataVector, uint *targetVector, int vectorLength);
 double discAndCalcMutualInformation(double *dataVector, double *targetVector, int vectorLength);
 
 /*******************************************************************************
@@ -43,7 +44,7 @@ double discAndCalcMutualInformation(double *dataVector, double *targetVector, in
 ** length(dataVector) == length(targetVector) == length(condtionVector) == vectorLength 
 ** otherwise it will error with a segmentation fault
 *******************************************************************************/
-double calcConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, int vectorLength);
+double calcConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, int vectorLength);
 double discAndCalcConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength);
 
 /*******************************************************************************

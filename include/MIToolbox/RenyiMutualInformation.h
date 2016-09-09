@@ -18,6 +18,7 @@
 #ifndef __Renyi_MutualInformation_H
 #define __Renyi_MutualInformation_H
 
+#include "MIToolbox/MIToolbox.h"
 #include "MIToolbox/CalculateProbability.h"
 
 #ifdef __cplusplus
@@ -33,7 +34,7 @@ extern "C" {
 ** length(dataVector) == length(targetVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-double calcRenyiMIDivergence(double alpha, int *dataVector, int *targetVector, int vectorLength);
+double calcRenyiMIDivergence(double alpha, uint *dataVector, uint *targetVector, int vectorLength);
 double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength);
 
 /****************************************************************************** 
@@ -41,7 +42,7 @@ double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *ta
 ** information, and thus is not a correct mutual information.
 ** It is maintained to show how different Renyi's Information Theory is.
 ******************************************************************************/
-double calcRenyiMIJoint(double alpha, int *dataVector, int *targetVector, int vectorLength);
+double calcRenyiMIJoint(double alpha, uint *dataVector, uint *targetVector, int vectorLength);
 double discAndCalcRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength);
 
 /*******************************************************************************

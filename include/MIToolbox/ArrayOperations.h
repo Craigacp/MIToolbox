@@ -18,6 +18,8 @@
 #ifndef __ArrayOperations_H
 #define __ArrayOperations_H
 
+#include "MIToolbox/MIToolbox.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
@@ -37,11 +39,12 @@ void incrementVector(double* vector, int vectorLength);
 *******************************************************************************/
 void printDoubleVector(double *vector, int vectorlength);
 void printIntVector(int *vector, int vectorLength);
+void printUintVector(uint *vector, int vectorLength);
 
 /*******************************************************************************
 ** Finds the maximum state of an int array.
 *******************************************************************************/
-int maxState(int* vector, int vectorLength);
+int maxState(uint* vector, int vectorLength);
 
 /*******************************************************************************
 ** numberOfUniqueValues finds the number of unique values in an array by 
@@ -59,7 +62,7 @@ int numberOfUniqueValues(double *featureVector, int vectorLength);
 ** length(inputVector) == length(outputVector) == vectorLength otherwise there
 ** is a memory leak
 *******************************************************************************/
-int normaliseArray(double *inputVector, int *outputVector, int vectorLength);
+int normaliseArray(double *inputVector, uint *outputVector, int vectorLength);
 
 /*******************************************************************************
 ** mergeArrays takes in two arrays and writes the joint state of those arrays
@@ -67,10 +70,10 @@ int normaliseArray(double *inputVector, int *outputVector, int vectorLength);
 **
 ** the length of the vectors must be the same and equal to vectorLength
 *******************************************************************************/
-int mergeArrays(int *firstVector, int *secondVector, int *outputVector, int vectorLength);
-int discAndMergeArrays(double *firstVector, double *secondVector, int *outputVector, int vectorLength);
-int mergeArraysArities(int *firstVector, int numFirstStates, int *secondVector, int numSecondStates, int *outputVector, int vectorLength);
-int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *secondVector, int numSecondStates, int *outputVector, int vectorLength);
+int mergeArrays(uint *firstVector, uint *secondVector, uint *outputVector, int vectorLength);
+int discAndMergeArrays(double *firstVector, double *secondVector, uint *outputVector, int vectorLength);
+int mergeArraysArities(uint *firstVector, int numFirstStates, uint *secondVector, int numSecondStates, uint *outputVector, int vectorLength);
+int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *secondVector, int numSecondStates, uint *outputVector, int vectorLength);
 
 /*******************************************************************************
 ** mergeMultipleArrays takes in a matrix and repeatedly merges the matrix using 
@@ -80,8 +83,8 @@ int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *s
 ** the length of the vectors must be the same and equal to vectorLength
 ** matrixWidth = the number of columns in the matrix
 *******************************************************************************/
-int mergeMultipleArrays(double *inputMatrix, int *outputVector, int matrixWidth, int vectorLength);
-int mergeMultipleArraysArities(double *inputMatrix, int *outputVector, int matrixWidth, int *arities, int vectorLength);
+int mergeMultipleArrays(double *inputMatrix, uint *outputVector, int matrixWidth, int vectorLength);
+int mergeMultipleArraysArities(double *inputMatrix, uint *outputVector, int matrixWidth, int *arities, int vectorLength);
 
 #ifdef __cplusplus
 }

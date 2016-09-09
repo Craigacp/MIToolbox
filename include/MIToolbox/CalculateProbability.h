@@ -17,6 +17,8 @@
 #ifndef __CalculateProbability_H
 #define __CalculateProbability_H
 
+#include "MIToolbox/MIToolbox.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
@@ -66,7 +68,7 @@ typedef struct wpState
 ** length(firstVector) == length(secondVector) == vectorLength
 ** otherwise it will crash
 *******************************************************************************/
-JointProbabilityState calculateJointProbability(int *firstVector, int *secondVector, int vectorLength);
+JointProbabilityState calculateJointProbability(uint *firstVector, uint *secondVector, int vectorLength);
 
 /*******************************************************************************
 ** discAndCalcJointProbability discretises the double vectors into int vectors,
@@ -82,7 +84,7 @@ JointProbabilityState discAndCalcJointProbability(double *firstVector, double *s
 ** as calculateJointProbability, with additional weightVectors giving the 
 ** weight assigned to each state.
 *******************************************************************************/
-WeightedJointProbState calculateWeightedJointProbability(int *firstVector, int *secondVector, double *weightVector, int vectorLength);
+WeightedJointProbState calculateWeightedJointProbability(uint *firstVector, uint *secondVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
 ** discAndCalcWeightedJointProbability returns the same joint state object
@@ -99,7 +101,7 @@ WeightedJointProbState discAndCalcWeightedJointProbability(double *firstVector, 
 ** length(dataVector) == vectorLength otherwise there
 ** will be a segmentation fault
 *******************************************************************************/
-ProbabilityState calculateProbability(int *dataVector, int vectorLength);
+ProbabilityState calculateProbability(uint *dataVector, int vectorLength);
 
 /*******************************************************************************
 ** discAndCalcProbability discretises the double vector into an int vector,
@@ -115,7 +117,7 @@ ProbabilityState discAndCalcProbability(double *dataVector, int vectorLength);
 ** as calculateProbability, with an additional weightVector giving the 
 ** weight assigned to each state.
 *******************************************************************************/
-WeightedProbState calculateWeightedProbability(int *dataVector, double *weightVector, int vectorLength);
+WeightedProbState calculateWeightedProbability(uint *dataVector, double *weightVector, int vectorLength);
 
 /*******************************************************************************
 ** discAndCalcWeightedProbability returns the same state object

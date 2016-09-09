@@ -26,6 +26,8 @@
 
 #define LOG_BASE BASE_TWO
 
+typedef unsigned int uint;
+
 #ifdef COMPILE_C
   #define C_IMPLEMENTATION
   #include <stdio.h>

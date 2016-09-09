@@ -40,7 +40,7 @@ double wEntropy(WeightedProbState state) {
   return entropy;
 }
 
-double calcWeightedEntropy(int *dataVector, double *weightVector, int vectorLength)
+double calcWeightedEntropy(uint *dataVector, double *weightVector, int vectorLength)
 {
   WeightedProbState state = calculateWeightedProbability(dataVector,weightVector,vectorLength);
   double entropy = wEntropy(state);
@@ -48,7 +48,7 @@ double calcWeightedEntropy(int *dataVector, double *weightVector, int vectorLeng
   freeWeightedProbState(state);
   
   return entropy;
-}/*calcWeightedEntropy(double *,double *,int)*/
+}/*calcWeightedEntropy(uint *,double *,int)*/
 
 double discAndCalcWeightedEntropy(double *dataVector, double *weightVector, int vectorLength)
 {
@@ -80,7 +80,7 @@ double wJointEntropy(WeightedJointProbState state) {
   return jointEntropy;
 }
 
-double calcWeightedJointEntropy(int *firstVector, int *secondVector, double *weightVector, int vectorLength)
+double calcWeightedJointEntropy(uint *firstVector, uint *secondVector, double *weightVector, int vectorLength)
 {
   WeightedJointProbState state = calculateWeightedJointProbability(firstVector,secondVector,weightVector,vectorLength);
   double jointEntropy = wJointEntropy(state);
@@ -88,7 +88,7 @@ double calcWeightedJointEntropy(int *firstVector, int *secondVector, double *wei
   freeWeightedJointProbState(state);
   
   return jointEntropy;
-}/*calcWeightedJointEntropy(int *,int *,double *,int)*/
+}/*calcWeightedJointEntropy(uint *,uint *,double *,int)*/
 
 double discAndCalcWeightedJointEntropy(double *firstVector, double *secondVector, double *weightVector, int vectorLength)
 {
@@ -125,7 +125,7 @@ double wCondEntropy(WeightedJointProbState state) {
   return condEntropy;
 }
 
-double calcWeightedConditionalEntropy(int *dataVector, int *conditionVector, double *weightVector, int vectorLength)
+double calcWeightedConditionalEntropy(uint *dataVector, uint *conditionVector, double *weightVector, int vectorLength)
 {
   WeightedJointProbState state = calculateWeightedJointProbability(dataVector,conditionVector,weightVector,vectorLength);
   double condEntropy = wCondEntropy(state);
@@ -134,7 +134,7 @@ double calcWeightedConditionalEntropy(int *dataVector, int *conditionVector, dou
   
   return condEntropy;
 
-}/*calcWeightedConditionalEntropy(int *,int *,double *,int)*/
+}/*calcWeightedConditionalEntropy(uint *,uint *,double *,int)*/
 
 double discAndCalcWeightedConditionalEntropy(double *dataVector, double *conditionVector, double *weightVector, int vectorLength)
 {

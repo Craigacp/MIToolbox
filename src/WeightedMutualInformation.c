@@ -50,7 +50,7 @@ double wmi(WeightedJointProbState state) {
   return mutualInformation;
 }
 
-double calcWeightedMutualInformation(int *dataVector, int *targetVector, double *weightVector, int vectorLength)
+double calcWeightedMutualInformation(uint *dataVector, uint *targetVector, double *weightVector, int vectorLength)
 {
   WeightedJointProbState state = calculateWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
   double mutualInformation = wmi(state);
@@ -58,7 +58,7 @@ double calcWeightedMutualInformation(int *dataVector, int *targetVector, double 
   freeWeightedJointProbState(state);
   
   return mutualInformation;
-}/*calcWeightedMutualInformation(int *,int *,double *,int)*/
+}/*calcWeightedMutualInformation(uint *,uint *,double *,int)*/
 
 double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength)
 {
@@ -70,11 +70,11 @@ double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVe
   return mutualInformation;
 }/*discAndCalcWeightedMutualInformation(double *,double *,double *,int)*/
 
-double calcWeightedConditionalMutualInformation(int *dataVector, int *targetVector, int *conditionVector, double *weightVector, int vectorLength)
+double calcWeightedConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, double *weightVector, int vectorLength)
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  uint *mergedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   
   mergeArrays(targetVector,conditionVector,mergedVector,vectorLength);
   
@@ -95,10 +95,10 @@ double discAndCalcWeightedConditionalMutualInformation(double *dataVector, doubl
 {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
-  int *dataNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *targetNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *conditionNormVector = (int *) checkedCalloc(vectorLength,sizeof(int));
-  int *mergedVector = (int *) checkedCalloc(vectorLength,sizeof(int));
+  uint *dataNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *targetNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *conditionNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
+  uint *mergedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   
   normaliseArray(dataVector,dataNormVector,vectorLength);
   normaliseArray(targetVector,targetNormVector,vectorLength);
@@ -123,3 +123,4 @@ double discAndCalcWeightedConditionalMutualInformation(double *dataVector, doubl
   
   return mutualInformation;
 }/*discAndCalcWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/
+

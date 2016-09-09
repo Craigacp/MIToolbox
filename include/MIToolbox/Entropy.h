@@ -18,6 +18,7 @@
 #ifndef __Entropy_H
 #define __Entropy_H
 
+#include "MIToolbox/MIToolbox.h"
 #include "MIToolbox/CalculateProbability.h"
 
 #ifdef __cplusplus
@@ -32,7 +33,7 @@ extern "C" {
 ** will be a segmentation fault
 *******************************************************************************/
 double discAndCalcEntropy(double *dataVector, int vectorLength);
-double calcEntropy(int *dataVector, int vectorLength);
+double calcEntropy(uint *dataVector, int vectorLength);
 
 /*******************************************************************************
 ** calculateJointEntropy returns the entropy in log base LOG_BASE of the joint 
@@ -42,7 +43,7 @@ double calcEntropy(int *dataVector, int vectorLength);
 ** will be a segmentation fault
 *******************************************************************************/
 double discAndCalcJointEntropy(double *firstVector, double *secondVector, int vectorLength);
-double calcJointEntropy(int *firstVector, int *secondVector, int vectorLength);
+double calcJointEntropy(uint *firstVector, uint *secondVector, int vectorLength);
 
 /*******************************************************************************
 ** calculateConditionalEntropy returns the entropy in log base LOG_BASE of dataVector
@@ -52,7 +53,7 @@ double calcJointEntropy(int *firstVector, int *secondVector, int vectorLength);
 ** will be a segmentation fault
 *******************************************************************************/
 double discAndCalcConditionalEntropy(double *dataVector, double *conditionVector, int vectorLength);
-double calcConditionalEntropy(int *dataVector, int *conditionVector, int vectorLength);
+double calcConditionalEntropy(uint *dataVector, uint *conditionVector, int vectorLength);
 
 /*******************************************************************************
 ** Inner functions which operate on state structs.

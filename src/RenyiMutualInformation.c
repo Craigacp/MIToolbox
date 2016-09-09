@@ -58,7 +58,7 @@ double renyiMI(JointProbabilityState state, double alpha) {
   return mutualInformation;
 }
 
-double calcRenyiMIDivergence(double alpha, int *dataVector, int *targetVector, int vectorLength)
+double calcRenyiMIDivergence(double alpha, uint *dataVector, uint *targetVector, int vectorLength)
 {
   JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
   double mutualInformation = renyiMI(state,alpha);
@@ -66,7 +66,7 @@ double calcRenyiMIDivergence(double alpha, int *dataVector, int *targetVector, i
   freeJointProbabilityState(state);
   
   return mutualInformation;
-}/*calcRenyiMIDivergence(double, int *, int *, int)*/
+}/*calcRenyiMIDivergence(double, uint *, uint *, int)*/
 
 double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength)
 {
@@ -78,7 +78,7 @@ double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *ta
   return mutualInformation;
 }/*calcRenyiMIDivergence(double, double *, double *, int)*/
 
-double calcRenyiMIJoint(double alpha, int *dataVector, int *targetVector, int vectorLength)
+double calcRenyiMIJoint(double alpha, uint *dataVector, uint *targetVector, int vectorLength)
 {
   double hY = calcRenyiEntropy(alpha, targetVector, vectorLength);
   double hX = calcRenyiEntropy(alpha, dataVector, vectorLength);
@@ -88,13 +88,13 @@ double calcRenyiMIJoint(double alpha, int *dataVector, int *targetVector, int ve
   double answer = hX + hY - hXY;
   
   return answer;
-}/*calcRenyiMIJoint(double, int*, int*, int)*/
+}/*calcRenyiMIJoint(double, uint*, uint*, int)*/
 
 double discAndCalcRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength)
 {
   double mi;
-  int *dataNormVector = (int *) checkedCalloc(vectorLength, sizeof(int));
-  int *targetNormVector = (int *) checkedCalloc(vectorLength, sizeof(int));
+  uint *dataNormVector = (uint *) checkedCalloc(vectorLength, sizeof(uint));
+  uint *targetNormVector = (uint *) checkedCalloc(vectorLength, sizeof(uint));
 
   normaliseArray(dataVector,dataNormVector,vectorLength);
   normaliseArray(targetVector,targetNormVector,vectorLength);
