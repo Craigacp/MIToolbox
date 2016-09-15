@@ -32,13 +32,19 @@ typedef unsigned int uint;
   #define C_IMPLEMENTATION
   #include <stdio.h>
   #include <stdlib.h>
-  #define CALLOC_FUNC calloc
-  #define FREE_FUNC free
+  #define CALLOC_FUNC(a,b) calloc(a,b)
+  #define FREE_FUNC(a) free(a)
+#elif defined(COMPILE_R)
+  #define R_IMPLEMENTATION
+  #include "R.h"
+  #define CALLOC_FUNC(a,b) Calloc((a)*(b),char)
+  #define FREE_FUNC(a) Free((a))
+  #define printf Rprintf
 #else
   #define MEX_IMPLEMENTATION
   #include "mex.h"
-  #define CALLOC_FUNC mxCalloc
-  #define FREE_FUNC mxFree
+  #define CALLOC_FUNC(a,b) mxCalloc(a,b)
+  #define FREE_FUNC(a) mxFree(a)
   #define printf mexPrintf /*for Octave-3.2*/
 #endif
 
