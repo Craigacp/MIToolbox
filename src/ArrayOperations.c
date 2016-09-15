@@ -25,7 +25,7 @@ void* checkedCalloc(size_t vectorLength, size_t sizeOfType) {
 #ifdef MEX_IMPLEMENTATION
         /* This call returns control to Matlab, with the associated error message */
         mexErrMsgTxt("Failed to allocate memory\n");
-#else
+#elif defined(C_IMPLEMENTATION)
         fprintf(stderr, "Error: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
 #endif
@@ -34,38 +34,32 @@ void* checkedCalloc(size_t vectorLength, size_t sizeOfType) {
 }
 
 void incrementVector(double* vector, int vectorLength) {
+    /*This is used to map from C indices to MATLAB indices*/
     int i = 0;
-    for (i = 0; i < vectorLength; i++)
-    {
-        vector[i]++; /*C indexes from 0 not 1*/
+    for (i = 0; i < vectorLength; i++) {
+        vector[i]++;
     }/*for length of array */
 }/* incrementVector(double*,int) */
 
-void printDoubleVector(double *vector, int vectorLength)
-{
+void printDoubleVector(double *vector, int vectorLength) {
     int i;
-    for (i = 0; i < vectorLength; i++)
-    {
+    for (i = 0; i < vectorLength; i++) {
         if (vector[i] > 0) {
             printf("Value at i=%d, is %f\n",i,vector[i]);
         }
     }/*for number of items in vector*/
 }/*printDoubleVector(double*,int)*/
 
-void printIntVector(int *vector, int vectorLength)
-{
+void printIntVector(int *vector, int vectorLength) {
     int i;
-    for (i = 0; i < vectorLength; i++)
-    {
+    for (i = 0; i < vectorLength; i++) {
         printf("Value at i=%d, is %d\n",i,vector[i]);
     }/*for number of items in vector*/
 }/*printIntVector(int*,int)*/
 
-void printUintVector(uint *vector, int vectorLength)
-{
+void printUintVector(uint *vector, int vectorLength) {
     int i;
-    for (i = 0; i < vectorLength; i++)
-    {
+    for (i = 0; i < vectorLength; i++) {
         printf("Value at i=%d, is %d\n",i,vector[i]);
     }/*for number of items in vector*/
 }/*printUintVector(int*,int)*/
@@ -81,8 +75,7 @@ int maxState(uint *vector, int vectorLength) {
     return max + 1;
 }
 
-int numberOfUniqueValues(double *featureVector, int vectorLength)
-{
+int numberOfUniqueValues(double *featureVector, int vectorLength) {
     int uniqueValues = 0;
     double *valuesArray = (double *) checkedCalloc(vectorLength,sizeof(double));
 
@@ -90,21 +83,17 @@ int numberOfUniqueValues(double *featureVector, int vectorLength)
     int j = 0;
     int i;
 
-    for (i = 0; i < vectorLength; i++)
-    {
+    for (i = 0; i < vectorLength; i++) {
         found = 0;
         j = 0;
-        while ((j < uniqueValues) && (found == 0))
-        {
-            if (valuesArray[j] == featureVector[i])
-            {
+        while ((j < uniqueValues) && (found == 0)) {
+            if (valuesArray[j] == featureVector[i]) {
                 found = 1;
                 featureVector[i] = (double) (j+1);
             }
             j++;
         }
-        if (!found)
-        {
+        if (!found) {
             valuesArray[uniqueValues] = featureVector[i];
             uniqueValues++;
             featureVector[i] = (double) uniqueValues;
@@ -126,36 +115,29 @@ int numberOfUniqueValues(double *featureVector, int vectorLength)
  ** length(inputVector) == length(outputVector) == vectorLength otherwise there
  ** is a memory leak
  *******************************************************************************/
-int normaliseArray(double *inputVector, uint *outputVector, int vectorLength)
-{
+int normaliseArray(double *inputVector, uint *outputVector, int vectorLength) {
     int minVal = 0;
     int maxVal = 0;
     int currentValue;
     int i;
 
-    if (vectorLength > 0)
-    {
+    if (vectorLength > 0) {
         int* tempVector = (int*) checkedCalloc(vectorLength,sizeof(int));
         minVal = (int) floor(inputVector[0]);
         maxVal = (int) floor(inputVector[0]);
 
-        for (i = 0; i < vectorLength; i++)
-        {
+        for (i = 0; i < vectorLength; i++) {
             currentValue = (int) floor(inputVector[i]);
             tempVector[i] = currentValue;
 
-            if (currentValue < minVal)
-            {
+            if (currentValue < minVal) {
                 minVal = currentValue;
-            }
-            else if (currentValue > maxVal)
-            {
+            } else if (currentValue > maxVal) {
                 maxVal = currentValue;
             }
         }/*for loop over vector*/
 
-        for (i = 0; i < vectorLength; i++)
-        {
+        for (i = 0; i < vectorLength; i++) {
             outputVector[i] = tempVector[i] - minVal;
         }
 
@@ -176,19 +158,16 @@ int normaliseArray(double *inputVector, uint *outputVector, int vectorLength)
  ** the length of the vectors must be the same and equal to vectorLength
  ** outputVector must be malloc'd before calling this function
  *******************************************************************************/
-int mergeArrays(uint *firstVector, uint *secondVector, uint *outputVector, int vectorLength)
-{
+int mergeArrays(uint *firstVector, uint *secondVector, uint *outputVector, int vectorLength) {
     int firstNumStates = maxState(firstVector,vectorLength);
     int secondNumStates = maxState(secondVector,vectorLength);
     uint *stateMap = (uint *) checkedCalloc(firstNumStates*secondNumStates,sizeof(uint));
     int stateCount = 1;
     int i, curIndex;
 
-    for (i = 0; i < vectorLength; i++)
-    {
+    for (i = 0; i < vectorLength; i++) {
         curIndex = firstVector[i] + (secondVector[i] * firstNumStates);
-        if (stateMap[curIndex] == 0)
-        {
+        if (stateMap[curIndex] == 0) {
             stateMap[curIndex] = stateCount;
             stateCount++;
         }
@@ -209,8 +188,7 @@ int mergeArrays(uint *firstVector, uint *secondVector, uint *outputVector, int v
  ** the length of the vectors must be the same and equal to vectorLength
  ** outputVector must be malloc'd before calling this function
  *******************************************************************************/
-int discAndMergeArrays(double *firstVector, double *secondVector, uint *outputVector, int vectorLength)
-{
+int discAndMergeArrays(double *firstVector, double *secondVector, uint *outputVector, int vectorLength) {
     uint *firstNormalisedVector;
     uint *secondNormalisedVector;
     int stateCount;
@@ -232,8 +210,7 @@ int discAndMergeArrays(double *firstVector, double *secondVector, uint *outputVe
     return stateCount;
 }/*discAndMergeArrays(double *,double *,int *, int)*/
 
-int mergeArraysArities(uint *firstVector, int numFirstStates, uint *secondVector, int numSecondStates, uint *outputVector, int vectorLength)
-{
+int mergeArraysArities(uint *firstVector, int numFirstStates, uint *secondVector, int numSecondStates, uint *outputVector, int vectorLength) {
     int i;
     int totalStates;
     int firstStateCheck, secondStateCheck;
@@ -241,24 +218,19 @@ int mergeArraysArities(uint *firstVector, int numFirstStates, uint *secondVector
     firstStateCheck = maxState(firstVector,vectorLength);
     secondStateCheck = maxState(secondVector,vectorLength);
 
-    if ((firstStateCheck <= numFirstStates) && (secondStateCheck <= numSecondStates))
-    {
-        for (i = 0; i < vectorLength; i++)
-        {
+    if ((firstStateCheck <= numFirstStates) && (secondStateCheck <= numSecondStates)) {
+        for (i = 0; i < vectorLength; i++) {
             outputVector[i] = firstVector[i] + (secondVector[i] * numFirstStates) + 1;
         }
         totalStates = numFirstStates * numSecondStates;
-    }
-    else
-    {
+    } else {
         totalStates = -1;
     }
 
     return totalStates;
 }/*mergeArraysArities(int *,int,int *,int,int *,int)*/
 
-int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *secondVector, int numSecondStates, uint *outputVector, int vectorLength)
-{
+int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *secondVector, int numSecondStates, uint *outputVector, int vectorLength) {
     uint *firstNormalisedVector;
     uint *secondNormalisedVector;
     int i;
@@ -271,16 +243,12 @@ int discAndMergeArraysArities(double *firstVector, int numFirstStates, double *s
     firstStateCheck = normaliseArray(firstVector,firstNormalisedVector,vectorLength);
     secondStateCheck = normaliseArray(secondVector,secondNormalisedVector,vectorLength);
 
-    if ((firstStateCheck <= numFirstStates) && (secondStateCheck <= numSecondStates))
-    {
-        for (i = 0; i < vectorLength; i++)
-        {
+    if ((firstStateCheck <= numFirstStates) && (secondStateCheck <= numSecondStates)) {
+        for (i = 0; i < vectorLength; i++) {
             outputVector[i] = firstNormalisedVector[i] + (secondNormalisedVector[i] * numFirstStates) + 1;
         }
         totalStates = numFirstStates * numSecondStates;
-    }
-    else
-    {
+    } else {
         totalStates = -1;
     }
 

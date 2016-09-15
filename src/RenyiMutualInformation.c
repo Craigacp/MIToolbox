@@ -37,13 +37,11 @@ double renyiMI(JointProbabilityState state, double alpha) {
   ** D_alpha(p(x,y)||p(x)p(y)) = 1/(alpha-1) * log(sum((p(x,y)^alpha)*((p(x)p(y))^(1-alpha))))
   */
   
-  for (i = 0; i < state.numJointStates; i++)
-  {
+  for (i = 0; i < state.numJointStates; i++) {
     firstIndex = i % state.numFirstStates;
     secondIndex = i / state.numFirstStates;
     
-    if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0))
-    {      
+    if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0)) {
       jointTemp = pow(state.jointProbabilityVector[i],alpha);
       marginalTemp = state.firstProbabilityVector[firstIndex] * state.secondProbabilityVector[secondIndex];
       marginalTemp = pow(marginalTemp,invAlpha);
@@ -58,8 +56,7 @@ double renyiMI(JointProbabilityState state, double alpha) {
   return mutualInformation;
 }
 
-double calcRenyiMIDivergence(double alpha, uint *dataVector, uint *targetVector, int vectorLength)
-{
+double calcRenyiMIDivergence(double alpha, uint *dataVector, uint *targetVector, int vectorLength) {
   JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
   double mutualInformation = renyiMI(state,alpha);
   
@@ -68,18 +65,16 @@ double calcRenyiMIDivergence(double alpha, uint *dataVector, uint *targetVector,
   return mutualInformation;
 }/*calcRenyiMIDivergence(double, uint *, uint *, int)*/
 
-double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength)
-{
+double discAndCalcRenyiMIDivergence(double alpha, double *dataVector, double *targetVector, int vectorLength) {
   JointProbabilityState state = discAndCalcJointProbability(dataVector,targetVector,vectorLength);
   double mutualInformation = renyiMI(state,alpha);
   
   freeJointProbabilityState(state);
   
   return mutualInformation;
-}/*calcRenyiMIDivergence(double, double *, double *, int)*/
+}/*discAndCalcRenyiMIDivergence(double, double *, double *, int)*/
 
-double calcRenyiMIJoint(double alpha, uint *dataVector, uint *targetVector, int vectorLength)
-{
+double calcRenyiMIJoint(double alpha, uint *dataVector, uint *targetVector, int vectorLength) {
   double hY = calcRenyiEntropy(alpha, targetVector, vectorLength);
   double hX = calcRenyiEntropy(alpha, dataVector, vectorLength);
   
@@ -90,8 +85,7 @@ double calcRenyiMIJoint(double alpha, uint *dataVector, uint *targetVector, int 
   return answer;
 }/*calcRenyiMIJoint(double, uint*, uint*, int)*/
 
-double discAndCalcRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength)
-{
+double discAndCalcRenyiMIJoint(double alpha, double *dataVector, double *targetVector, int vectorLength) {
   double mi;
   uint *dataNormVector = (uint *) checkedCalloc(vectorLength, sizeof(uint));
   uint *targetNormVector = (uint *) checkedCalloc(vectorLength, sizeof(uint));

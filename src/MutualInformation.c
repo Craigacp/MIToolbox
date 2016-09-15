@@ -31,13 +31,11 @@ double mi(JointProbabilityState state) {
   /*
   ** I(X;Y) = \sum_x \sum_y p(x,y) * \log (p(x,y)/p(x)p(y))
   */
-  for (i = 0; i < state.numJointStates; i++)
-  {
+  for (i = 0; i < state.numJointStates; i++) {
     firstIndex = i % state.numFirstStates;
     secondIndex = i / state.numFirstStates;
     
-    if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0))
-    {
+    if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0)) {
       /*double division is probably more stable than multiplying two small numbers together
       ** mutualInformation += state.jointProbabilityVector[i] * log(state.jointProbabilityVector[i] / (state.firstProbabilityVector[firstIndex] * state.secondProbabilityVector[secondIndex]));
       */
@@ -50,8 +48,7 @@ double mi(JointProbabilityState state) {
   return mutualInformation;
 }/*mi(JointProbabilityState)*/
 
-double calcMutualInformation(uint *dataVector, uint *targetVector, int vectorLength)
-{
+double calcMutualInformation(uint *dataVector, uint *targetVector, int vectorLength) {
   JointProbabilityState state = calculateJointProbability(dataVector,targetVector,vectorLength);
     
   double mutualInformation = mi(state);
@@ -61,8 +58,7 @@ double calcMutualInformation(uint *dataVector, uint *targetVector, int vectorLen
   return mutualInformation;
 }/*calculateMutualInformation(uint *,uint *,int)*/
 
-double discAndCalcMutualInformation(double *dataVector, double *targetVector, int vectorLength)
-{
+double discAndCalcMutualInformation(double *dataVector, double *targetVector, int vectorLength) {
   JointProbabilityState state = discAndCalcJointProbability(dataVector,targetVector,vectorLength);
     
   double mutualInformation = mi(state);
@@ -72,8 +68,7 @@ double discAndCalcMutualInformation(double *dataVector, double *targetVector, in
   return mutualInformation;
 }/*discAndCalcMutualInformation(double *,double *,int)*/
 
-double calcConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, int vectorLength)
-{
+double calcConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, int vectorLength) {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
   uint *mergedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
@@ -93,8 +88,7 @@ double calcConditionalMutualInformation(uint *dataVector, uint *targetVector, ui
   return mutualInformation;
 }/*calculateConditionalMutualInformation(double *,double *,double *,int)*/
 
-double discAndCalcConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength)
-{
+double discAndCalcConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, int vectorLength) {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
   uint *dataNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
@@ -125,4 +119,3 @@ double discAndCalcConditionalMutualInformation(double *dataVector, double *targe
   
   return mutualInformation;
 }/*calculateConditionalMutualInformation(double *,double *,double *,int)*/
-

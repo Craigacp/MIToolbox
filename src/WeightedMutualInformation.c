@@ -31,16 +31,11 @@ double wmi(WeightedJointProbState state) {
   /*
   ** I_w(X;Y) = \sum_x \sum_y w(x,y)p(x,y) * \log (p(x,y)/p(x)p(y))
   */
-  for (i = 0; i < state.numJointStates; i++)
-  {
+  for (i = 0; i < state.numJointStates; i++) {
     firstIndex = i % state.numFirstStates;
     secondIndex = i / state.numFirstStates;
     
-    if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0))
-    {
-      /*double division is probably more stable than multiplying two small numbers together
-      ** mutualInformation += state.jointProbabilityVector[i] * log(state.jointProbabilityVector[i] / (state.firstProbabilityVector[firstIndex] * state.secondProbabilityVector[secondIndex]));
-      */
+    if ((state.jointProbabilityVector[i] > 0) && (state.firstProbabilityVector[firstIndex] > 0) && (state.secondProbabilityVector[secondIndex] > 0)) {
       mutualInformation += state.jointWeightVector[i] * state.jointProbabilityVector[i] * log(state.jointProbabilityVector[i] / state.firstProbabilityVector[firstIndex] / state.secondProbabilityVector[secondIndex]);
     }
   }
@@ -50,8 +45,7 @@ double wmi(WeightedJointProbState state) {
   return mutualInformation;
 }
 
-double calcWeightedMutualInformation(uint *dataVector, uint *targetVector, double *weightVector, int vectorLength)
-{
+double calcWeightedMutualInformation(uint *dataVector, uint *targetVector, double *weightVector, int vectorLength) {
   WeightedJointProbState state = calculateWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
   double mutualInformation = wmi(state);
     
@@ -60,8 +54,7 @@ double calcWeightedMutualInformation(uint *dataVector, uint *targetVector, doubl
   return mutualInformation;
 }/*calcWeightedMutualInformation(uint *,uint *,double *,int)*/
 
-double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength)
-{
+double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVector, double *weightVector, int vectorLength) {
   WeightedJointProbState state = discAndCalcWeightedJointProbability(dataVector,targetVector,weightVector,vectorLength);
   double mutualInformation = wmi(state);
     
@@ -70,8 +63,7 @@ double discAndCalcWeightedMutualInformation(double *dataVector, double *targetVe
   return mutualInformation;
 }/*discAndCalcWeightedMutualInformation(double *,double *,double *,int)*/
 
-double calcWeightedConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, double *weightVector, int vectorLength)
-{
+double calcWeightedConditionalMutualInformation(uint *dataVector, uint *targetVector, uint *conditionVector, double *weightVector, int vectorLength) {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
   uint *mergedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
@@ -89,10 +81,9 @@ double calcWeightedConditionalMutualInformation(uint *dataVector, uint *targetVe
   mergedVector = NULL;
   
   return mutualInformation;
-}/*calculateWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/
+}/*calcWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/
 
-double discAndCalcWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength)
-{
+double discAndCalcWeightedConditionalMutualInformation(double *dataVector, double *targetVector, double *conditionVector, double *weightVector, int vectorLength) {
   double mutualInformation = 0.0;
   double firstCondition, secondCondition;
   uint *dataNormVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
@@ -123,4 +114,3 @@ double discAndCalcWeightedConditionalMutualInformation(double *dataVector, doubl
   
   return mutualInformation;
 }/*discAndCalcWeightedConditionalMutualInformation(double *,double *,double *,double *,int)*/
-
