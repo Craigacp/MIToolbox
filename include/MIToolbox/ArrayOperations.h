@@ -42,6 +42,12 @@ void printIntVector(int *vector, int vectorLength);
 void printUintVector(uint *vector, int vectorLength);
 
 /*******************************************************************************
+** Generates a 2D representation of a contiguous fortran style matrix
+*******************************************************************************/
+uint **generateIntIndices(uint *featureMatrix, uint noOfSamples, uint noOfFeatures);
+double **generateDoubleIndices(double *featureMatrix, uint noOfSamples, uint noOfFeatures);
+
+/*******************************************************************************
 ** Finds the maximum state of an int array.
 *******************************************************************************/
 int maxState(uint* vector, int vectorLength);

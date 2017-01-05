@@ -64,6 +64,30 @@ void printUintVector(uint *vector, int vectorLength) {
     }/*for number of items in vector*/
 }/*printUintVector(int*,int)*/
 
+uint **generateIntIndices(uint *featureMatrix, uint noOfSamples, uint noOfFeatures) {
+    int j;
+
+    uint **feature2D = (uint **) checkedCalloc(noOfFeatures,sizeof(uint *));
+    
+    for (j = 0; j < noOfFeatures; j++) {
+        feature2D[j] = featureMatrix + j*noOfSamples;
+    }
+
+    return feature2D;
+}
+
+double **generateDoubleIndices(double *featureMatrix, uint noOfSamples, uint noOfFeatures) {
+    int j;
+
+    double **feature2D = (double **) checkedCalloc(noOfFeatures,sizeof(double *));
+    
+    for (j = 0; j < noOfFeatures; j++) {
+        feature2D[j] = featureMatrix + j*noOfSamples;
+    }
+
+    return feature2D;
+}
+
 int maxState(uint *vector, int vectorLength) {
     int i, max;
     max = 0;
