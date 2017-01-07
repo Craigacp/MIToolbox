@@ -3,7 +3,7 @@
 ** is the MATLAB entry point for the MIToolbox functions when called from
 ** a MATLAB/OCTAVE script.
 **
-** Copyright 2010 Adam Pocock, The University Of Manchester
+** Copyright 2010-2017 Adam Pocock, The University Of Manchester
 ** www.cs.manchester.ac.uk
 **
 ** This file is part of MIToolbox, licensed under the 3-clause BSD license.

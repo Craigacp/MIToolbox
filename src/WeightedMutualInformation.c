@@ -11,7 +11,7 @@
 ** Author: Adam Pocock
 ** Created: 20/06/2011
 **
-**  Copyright 2010/2011 Adam Pocock, The University Of Manchester
+**  Copyright 2010-2017 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox, licensed under the 3-clause BSD license.

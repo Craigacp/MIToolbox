@@ -10,7 +10,7 @@
 ** Created 26/3/2010
 ** Updated - 22/02/2014 - Added checking on calloc.
 **
-** Copyright 2010-2014 Adam Pocock, The University Of Manchester
+** Copyright 2010-2017 Adam Pocock, The University Of Manchester
 ** www.cs.manchester.ac.uk
 **
 ** This file is part of MIToolbox, licensed under the 3-clause BSD license.

@@ -1,15 +1,14 @@
 /*******************************************************************************
+** MIToolbox.h
+** Provides the header files and #defines to ensure compatibility with MATLAB
+** and C/C++. By default it compiles to MATLAB, if COMPILE_C is defined it
+** links to the C memory allocation functions.
 **
-**  MIToolbox.h
-**  Provides the header files and #defines to ensure compatibility with MATLAB
-**  and C/C++. By default it compiles to MATLAB, if COMPILE_C is defined it
-**  links to the C memory allocation functions.
+** Author: Adam Pocock
+** Created: 17/2/2010
+** Modified: 24/06/2011 - added log base #define
 **
-**  Author: Adam Pocock
-**  Created: 17/2/2010
-**  Modified: 24/06/2011 - added log base #define
-**
-**  Copyright 2010/2011 Adam Pocock, The University Of Manchester
+**  Copyright 2010-2017 Adam Pocock, The University Of Manchester
 **  www.cs.manchester.ac.uk
 **
 **  This file is part of MIToolbox, licensed under the 3-clause BSD license.

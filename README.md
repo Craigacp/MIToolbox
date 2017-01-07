@@ -89,7 +89,7 @@ install MIToolbox into /usr/local/lib & /usr/local/include.
 All code is licensed under the 3-clause BSD license.
 
 Update History
- - xx/09/2016 - v3.0.0 - Refactored internals to expose integer information theoretic calculations.
+ - 07/01/2017 - v3.0.0 - Refactored internals to expose integer information theoretic calculations.
  - 10/01/2016 - v2.1.2 - Relicense from LGPL to BSD. Added checks to ensure input MATLAB types are doubles.
  - 02/02/2015 - v2.1.1 - Fixed up the Makefile so it installs the headers too.
  - 22/02/2014 - v2.1  - Fixed a couple of bugs related to memory handling.
