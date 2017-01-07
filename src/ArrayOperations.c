@@ -26,7 +26,7 @@ void* checkedCalloc(size_t vectorLength, size_t sizeOfType) {
         /* This call returns control to Matlab, with the associated error message */
         mexErrMsgTxt("Failed to allocate memory\n");
 #elif defined(C_IMPLEMENTATION)
-        fprintf(stderr, "Error: %s\n", strerror(errno));
+        fprintf(stderr, "Error: %s\nAttempted to allocate %lu length of size %lu\n", strerror(errno), vectorLength, sizeOfType);
         exit(EXIT_FAILURE);
 #endif
     }
