@@ -264,11 +264,12 @@ ProbabilityState calculateProbability(uint* dataVector, int vectorLength) {
 }
 
 ProbabilityState discAndCalcProbability(double *dataVector, int vectorLength) {
+  ProbabilityState state;
   uint *normalisedVector = (uint *) checkedCalloc(vectorLength,sizeof(uint));
   
   normaliseArray(dataVector,normalisedVector,vectorLength);
   
-  ProbabilityState state = calculateProbability(normalisedVector,vectorLength);
+  state = calculateProbability(normalisedVector,vectorLength);
 
   FREE_FUNC(normalisedVector);
   normalisedVector = NULL;

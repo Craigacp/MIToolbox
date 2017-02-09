@@ -11,7 +11,7 @@
 #This file is part of MIToolbox, licensed under the 3-clause BSD license.
 
 PREFIX = /usr/local
-CFLAGS = -O3 -fPIC -std=c89 -Wall -Werror
+CFLAGS = -O3 -fPIC -std=c89 -pedantic -Wall -Werror
 INCLUDES = -Iinclude
 CC = gcc
 objects = build/ArrayOperations.o build/CalculateProbability.o \
