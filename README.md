@@ -1,6 +1,6 @@
 MIToolbox
 =========
-v3.0.0 for C/C++ and MATLAB/Octave
+v3.0.1 for C/C++ and MATLAB/Octave
 
 MIToolbox contains a set of functions to calculate information theoretic
 quantities from data, such as the entropy and mutual information.  The toolbox
@@ -89,6 +89,7 @@ install MIToolbox into /usr/local/lib & /usr/local/include.
 All code is licensed under the 3-clause BSD license.
 
 Update History
+ - 08/02/2017 - v3.0.1 - Bug fix to ensure ANSI C compatibility.
  - 07/01/2017 - v3.0.0 - Refactored internals to expose integer information theoretic calculations.
  - 10/01/2016 - v2.1.2 - Relicense from LGPL to BSD. Added checks to ensure input MATLAB types are doubles.
  - 02/02/2015 - v2.1.1 - Fixed up the Makefile so it installs the headers too.
