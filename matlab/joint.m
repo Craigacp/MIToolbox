@@ -9,11 +9,14 @@ function output = joint(X,arities)
 %if the joint variable is only compared with variables using the same samples,
 %then arity information is not required
 
-if (~isa(X,'double') || ~isa(arities,'double'))
-  error('Error, inputs must be double vectors or matrices')
-end
 if (nargin == 2)
+  if (~isa(X,'double') || ~isa(arities,'double'))
+    error('Error, inputs must be double vectors or matrices')
+  end
   [output] = MIToolboxMex(3,X,arities);
 else
+  if (~isa(X,'double'))
+    error('Error, input must be a double vector or matrix')
+  end
   [output] = MIToolboxMex(3,X);
 end
