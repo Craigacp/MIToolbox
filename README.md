@@ -79,20 +79,18 @@ ans =
 ```
 ======
 
-To compile the library for use in MATLAB/OCTAVE, execute CompileMIToolbox.m
-from within MATLAB in the "matlab" folder.
-
-To compile the library for use with C programs run 'make x86' for a 32-bit
-library, or 'make x64' for a 64-bit library. Then run 'sudo make install' to
-install MIToolbox into /usr/local/lib & /usr/local/include.
-
 All code is licensed under the 3-clause BSD license.
 
 Compilation instructions:
+ - MATLAB/OCTAVE 
+    - run `CompileMIToolbox.m` from the `matlab` directory.
+ - Linux C shared library 
+    - run `make x86` or `make x64` for 32-bit or 64-bit versions respectively.
+    - run `sudo make install` to install MIToolbox into `/usr/local/lib` and `/usr/local/include`
  - Windows C static library
 	- install MinGW from https://sourceforge.net/projects/mingw-w64/
-	- add MinGW binaries folders to PATH, e.g. mingw/bin, mingw/msys/bin 
-	- run the included makefile by > make x64_win
+	- add MinGW binaries folders to PATH, e.g. `mingw/bin`, `mingw/msys/bin`
+	- run the included makefile by > `make x64_win`
 
 Update History
  - 08/02/2017 - v3.0.1 - Bug fix to ensure ANSI C compatibility.
