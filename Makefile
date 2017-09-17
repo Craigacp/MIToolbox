@@ -14,6 +14,8 @@ PREFIX = /usr/local
 CFLAGS = -O3 -fPIC -std=c89 -pedantic -Wall -Werror
 INCLUDES = -Iinclude
 CC = gcc
+AR = ar
+AR_FLAGS = rcs
 objects = build/ArrayOperations.o build/CalculateProbability.o \
 		  build/Entropy.o build/MutualInformation.o \
 		  build/RenyiEntropy.o build/RenyiMutualInformation.o \
@@ -22,10 +24,13 @@ objects = build/ArrayOperations.o build/CalculateProbability.o \
 libMIToolbox.so : $(objects)
 	$(CC) $(CFLAGS) -shared -o libMIToolbox.so $(objects) -lm
 
+libMIToolbox.a : $(objects)
+	$(AR) $(AR_FLAGS) libMIToolbox.a $(objects)
+
 build/%.o: src/%.c 
 	@mkdir -p build
 	$(CC) $(CFLAGS) $(INCLUDES) -DCOMPILE_C -o build/$*.o -c $<
-	
+
 .PHONY : debug x86 x64 matlab matlab-debug intel install test
 debug:
 	$(MAKE) libMIToolbox.so "CFLAGS = -g -DDEBUG -fPIC"
@@ -35,6 +40,9 @@ x86:
 	
 x64:
 	$(MAKE) libMIToolbox.so "CFLAGS = -O3 -fPIC -m64"
+
+x64_win:
+	$(MAKE) libMIToolbox.a "CFLAGS = -O3 -m64"
 	
 intel:
 	$(MAKE) libMIToolbox.so "CC = icc" "CFLAGS = -O2 -fPIC -xHost"
@@ -43,6 +51,7 @@ clean:
 	-rm -fr build
 	-rm -f matlab/*.o matlab/*.mex*
 	-rm -f libMIToolbox.so
+	-rm -f libMIToolbox.a
 
 install: libMIToolbox.so
 	@echo "Installing libMIToolbox.so to $(PREFIX)/lib"
