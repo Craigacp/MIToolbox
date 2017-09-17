@@ -88,6 +88,12 @@ install MIToolbox into /usr/local/lib & /usr/local/include.
 
 All code is licensed under the 3-clause BSD license.
 
+Compilation instructions:
+ - Windows C static library
+	- install MinGW from https://sourceforge.net/projects/mingw-w64/
+	- add MinGW binaries folders to PATH, e.g. mingw/bin, mingw/msys/bin 
+	- run the included makefile by > make x64_win
+
 Update History
  - 08/02/2017 - v3.0.1 - Bug fix to ensure ANSI C compatibility.
  - 07/01/2017 - v3.0.0 - Refactored internals to expose integer information theoretic calculations.
