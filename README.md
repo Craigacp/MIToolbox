@@ -87,10 +87,10 @@ Compilation instructions:
  - Linux C shared library 
     - run `make x86` or `make x64` for 32-bit or 64-bit versions respectively.
     - run `sudo make install` to install MIToolbox into `/usr/local/lib` and `/usr/local/include`
- - Windows C static library
+ - Windows C dll
 	- install MinGW from https://sourceforge.net/projects/mingw-w64/
 	- add MinGW binaries folders to PATH, e.g. `mingw/bin`, `mingw/msys/bin`
-	- run the included makefile by > `make x64_win`
+	- run `make x64_win` to compile a 64-bit Windows dll.
 
 Update History
  - 08/02/2017 - v3.0.1 - Bug fix to ensure ANSI C compatibility.
