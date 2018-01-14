@@ -1,6 +1,6 @@
 MIToolbox
 =========
-v3.0.1 for C/C++ and MATLAB/Octave
+v3.1.0 for C/C++, MATLAB/Octave and Java
 
 MIToolbox contains a set of functions to calculate information theoretic
 quantities from data, such as the entropy and mutual information.  The toolbox
@@ -14,7 +14,7 @@ These functions are targeted for use with feature selection algorithms rather
 than communication channels and so expect all the data to be available before 
 execution and sample their own probability distributions from the data.
 
-All functions expect the inputs to be vectors or matrices of doubles.
+All MATLAB functions expect the inputs to be vectors or matrices of doubles.
 
 Functions contained:
  - Entropy
@@ -91,8 +91,15 @@ Compilation instructions:
 	- install MinGW from https://sourceforge.net/projects/mingw-w64/
 	- add MinGW binaries folders to PATH, e.g. `mingw/bin`, `mingw/msys/bin`
 	- run `make x64_win` to compile a 64-bit Windows dll.
+ - Java (requires Java 8)
+    - run `make x64`, `sudo make install` to build and install the C library.
+    - then `make java` to build the JNI wrapper.
+    - then run `mvn package` in the `java` directory to build the jar file.
+    - you will need to add the libmitoolbox-java.so file to your java library path.
+    - Note: the Java code should work on all platforms and future versions of Java, but the included Makefile only works on Ubuntu & Java 8.
 
 Update History
+ - 14/01/2018 - v3.1.0 - Adding a Java wrapper through JNI.
  - 08/02/2017 - v3.0.1 - Bug fix to ensure ANSI C compatibility.
  - 07/01/2017 - v3.0.0 - Refactored internals to expose integer information theoretic calculations.
  - 10/01/2016 - v2.1.2 - Relicense from LGPL to BSD. Added checks to ensure input MATLAB types are doubles.

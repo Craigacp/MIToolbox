@@ -13,6 +13,8 @@
 PREFIX = /usr/local
 CFLAGS = -O3 -fPIC -std=c89 -pedantic -Wall -Werror
 INCLUDES = -Iinclude
+JNI_INCLUDES = -I/usr/lib/jvm/java-8-openjdk-amd64/include/ -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux
+JAVA_INCLUDES = -Ijava/native/include
 CC = gcc
 objects = build/ArrayOperations.o build/CalculateProbability.o \
 		  build/Entropy.o build/MutualInformation.o \
@@ -28,6 +30,12 @@ libMIToolbox.dll : $(objects)
 build/%.o: src/%.c 
 	@mkdir -p build
 	$(CC) $(CFLAGS) $(INCLUDES) -DCOMPILE_C -o build/$*.o -c $<
+
+java: java/src/main/resources/libmitoolbox-java.so
+
+java/src/main/resources/libmitoolbox-java.so: java/src/native/MIToolboxJNI.c
+	@mkdir -p java/src/main/resources
+	$(CC) $(CFLAGS) $(INCLUDES) $(JNI_INCLUDES) $(JAVA_INCLUDES) -DCOMPILE_C -shared -o $@ java/src/native/MIToolboxJNI.c -lm -lMIToolbox
 
 .PHONY : debug x86 x64 matlab matlab-debug intel install test
 debug:
