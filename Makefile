@@ -55,6 +55,7 @@ intel:
 
 clean:
 	-rm -fr build
+	-rm -f java/src/main/resources/libmitoolbox-java.so
 	-rm -f matlab/*.o matlab/*.mex*
 	-rm -f libMIToolbox.so
 	-rm -f libMIToolbox.dll
